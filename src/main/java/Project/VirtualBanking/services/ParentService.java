@@ -12,7 +12,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,78 +25,71 @@ public class ParentService {
     }
 
     public ParentDto saveParent(ParentDto parentDto){
-        EncryptionKey encryptionKey = encryptionKeyRepository.save(new EncryptionKey());
-        Parent parent = parentRepository.save(Parent.fromDto(parentDto, encryptionKey));
-        return ParentDto.fromEntity(parent);
+        return ParentDto.fromEntity(parentRepository.save(Parent.fromDto(
+                parentDto,
+                encryptionKeyRepository.save(new EncryptionKey()
+                )
+        )));
     }
 
     public List<ParentDto> findAllParents(){
-        List<ParentDto> parents = parentRepository.findAll().stream().map(parent -> ParentDto.fromEntity(parent))
+        return parentRepository.findAll().stream().map(parent -> ParentDto.fromEntity(parent))
                 .collect(Collectors.toList());
-        return parents;
     }
 
     public List<ParentDto> findAllActiveParents(){
-        List<ParentDto> parents =  parentRepository.findAll().stream().filter(parent -> parent.isActive())
+        return parentRepository.findAll().stream().filter(parent -> parent.isActive())
                 .map(parent -> ParentDto.fromEntity(parent)).collect(Collectors.toList());
-        return parents;
     }
 
     public ParentDto findParentById(Integer parentId){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
-        return ParentDto.fromEntity(parent);
+        return ParentDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
     public List<ParentWithChildrenDto> findAllParentsWithChildren(){
-        List<ParentWithChildrenDto> parentWithChildrenDtos = parentRepository.findAll().stream()
+        return parentRepository.findAll().stream()
                 .map(parentWithChildren -> ParentWithChildrenDto.fromEntity(parentWithChildren))
                 .collect(Collectors.toList());
-        return parentWithChildrenDtos;
     }
 
     public List<ParentWithChildrenDto> findAllActiveParentsWithActiveChildren(){
-        List<ParentWithChildrenDto> parentWithChildrenDtos = parentRepository.findAll().stream()
-                .filter(parent -> parent.isActive())
+        return parentRepository.findAll().stream().filter(parent -> parent.isActive())
                 .map(parentWithChildren -> ParentWithChildrenDto.fromEntity(parentWithChildren))
                 .collect(Collectors.toList());
-        return parentWithChildrenDtos;
     }
 
     public ParentWithChildrenDto findParentWithChildrenByParentId (Integer parentId){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
-        return ParentWithChildrenDto.fromEntity(parent);
+        return ParentWithChildrenDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
     public ParentWithChildrenDto findParentWithActiveChildrenByParentId (Integer parentId) {
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
-        ParentWithChildrenDto parentWithChildrenDto = ParentWithChildrenDto.fromEntity(parent);
-        List<ChildDto> activeChildren = parentWithChildrenDto.getChildren().stream().filter(ChildDto::isActive)
-                .collect(Collectors.toList());
-        parentWithChildrenDto.setChildren(activeChildren);
+        ParentWithChildrenDto parentWithChildrenDto = ParentWithChildrenDto.fromEntity(
+                parentRepository.findById(parentId).orElseThrow()
+        );
+        parentWithChildrenDto.setChildren(
+                (parentWithChildrenDto).getChildren().stream().filter(ChildDto::isActive).collect(Collectors.toList())
+        );
         return parentWithChildrenDto;
     }
 
     public ParentDto editParent(Integer parentId, ParentDto parentDto){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
         BeanUtils.copyProperties(parentDto, parent, "parentId", "accountCreationDate", "active");
         EncryptParent.encryptParent(parent, parent.getEncryptionKey().getEncryptionKey());
-        parent = parentRepository.save(parent);
-        return ParentDto.fromEntity(parent);
+        return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
     public ParentDto activateParent(Integer parentId){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(true);
-        parent = parentRepository.save(parent);
-        return ParentDto.fromEntity(parent);
+        return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
     public ParentDto deactivateParent(Integer parentId){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
-        parent = parentRepository.save(parent);
-        return ParentDto.fromEntity(parent);
+        return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
     public void deleteParent(Integer parentId){

@@ -29,49 +29,44 @@ public class ChildService {
     }
 
     public ChildDto saveChild(ChildDto childDto, Integer parentId){
-        Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
-        EncryptionKey encryptionKey = encryptionKeyRepository.save(new EncryptionKey());
-        Child child = childRepository.save(Child.fromDto(childDto, parent, encryptionKey));
-        return ChildDto.fromEntity(child);
+        return ChildDto.fromEntity(childRepository.save(Child.fromDto(
+                childDto,
+                parentRepository.findById(parentId).orElseThrow(),
+                encryptionKeyRepository.save(new EncryptionKey()
+                )
+        )));
     }
 
     public List<ChildDto> findAllChildren(){
-        List<ChildDto> children = childRepository.findAll().stream().map(child -> ChildDto.fromEntity(child))
-                .collect(Collectors.toList());
-        return children;
+        return childRepository.findAll().stream().map(child -> ChildDto.fromEntity(child)).collect(Collectors.toList());
     }
 
     public List<ChildDto> findAllActiveChildren(){
-        List<ChildDto> children = childRepository.findAll().stream().filter(child -> child.isActive())
+        return childRepository.findAll().stream().filter(child -> child.isActive())
                 .map(child -> ChildDto.fromEntity(child)).collect(Collectors.toList());
-        return children;
     }
 
     public ChildDto findChildById(Integer childId){
-        Child child = childRepository.findById(childId).orElseThrow(NoSuchElementException::new);
-        return ChildDto.fromEntity(child);
+        return ChildDto.fromEntity(childRepository.findById(childId).orElseThrow());
     }
 
     public ChildDto editChildren(ChildDto childDto, Integer childId){
-        Child child = childRepository.findById(childId).orElseThrow(NoSuchElementException::new);
+        Child child = childRepository.findById(childId).orElseThrow();
         BeanUtils.copyProperties(childDto, child, "childID", "accountCreationDate", "active");
         EncryptChild.encryptChild(child, child.getEncryptionKey().getEncryptionKey());
-        child = childRepository.save(child);
-        return ChildDto.fromEntity(child);
+        return ChildDto.fromEntity(childRepository.save(child));
     }
 
     public ChildDto activateChildren(Integer childId){
-        Child child = childRepository.findById(childId).orElseThrow(NoSuchElementException::new);
+        Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(true);
-        child = childRepository.save(child);
-        return ChildDto.fromEntity(child);
+        return ChildDto.fromEntity(childRepository.save(child));
     }
 
     public ChildDto deactivateChildren(Integer childId){
-        Child child = childRepository.findById(childId).orElseThrow(NoSuchElementException::new);
+        Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(false);
-        child = childRepository.save(child);
-        return ChildDto.fromEntity(child);
+        return ChildDto.fromEntity(childRepository.save(child));
     }
 
     public void deleteChild(Integer childId){
