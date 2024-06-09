@@ -43,6 +43,10 @@ public class Child {
 
     private String details;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "keyID", referencedColumnName = "keyID")
+    private EncryptionKey encryptionKey;
+
     public Child() {
     }
 
