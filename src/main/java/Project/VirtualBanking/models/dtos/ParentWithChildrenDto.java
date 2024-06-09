@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 public class ParentWithChildrenDto {
 
     private ParentDto parentDto;
-    private List<ChildDto> children;
+    private List<ChildDto> childrenDto;
 
     public ParentWithChildrenDto() {
     }
 
-    public ParentWithChildrenDto(ParentDto parentDto, List<ChildDto> children) {
+    public ParentWithChildrenDto(ParentDto parentDto, List<ChildDto> childrenDto) {
         this.parentDto = parentDto;
-        this.children = children;
+        this.childrenDto = childrenDto;
     }
 
     public ParentDto getParentDto() {
@@ -25,18 +25,17 @@ public class ParentWithChildrenDto {
         this.parentDto = parentDto;
     }
 
-    public List<ChildDto> getChildren() {
-        return children;
+    public List<ChildDto> getChildrenDto() {
+        return childrenDto;
     }
-    public void setChildren(List<ChildDto> children) {
-        this.children = children;
+    public void setChildrenDto(List<ChildDto> childrenDto) {
+        this.childrenDto = childrenDto;
     }
 
     public static ParentWithChildrenDto fromEntity(Parent parent){
-        ParentWithChildrenDto parentWithChildren = new ParentWithChildrenDto(
+        return new ParentWithChildrenDto(
                 ParentDto.fromEntity(parent),
                 parent.getChildren().stream().map(child -> ChildDto.fromEntity(child)).collect(Collectors.toList())
         );
-        return parentWithChildren;
     }
 }

@@ -31,8 +31,6 @@ public class Child {
     @Column(nullable = false)
     private String emailAddress;
 
-    private String schoolEmailAddressID;
-
     @Column(nullable = false)
     private String username;
 
@@ -53,14 +51,13 @@ public class Child {
     }
 
     public Child(Parent parent, String name, String surname, LocalDate dateOfBirth,
-                 String emailAddress, String schoolEmailAddressID, String username, String password, String details,
+                 String emailAddress, String username, String password, String details,
                  EncryptionKey encryptionKey) {
         this.parent = parent;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.emailAddress = emailAddress;
-        this.schoolEmailAddressID = schoolEmailAddressID;
         this.username = username;
         this.password = password;
         this.accountCreationDate = LocalDateTime.now();
@@ -109,13 +106,6 @@ public class Child {
     }
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public String getSchoolEmailAddressID() {
-        return schoolEmailAddressID;
-    }
-    public void setSchoolEmailAddressID(String schoolEmailAddressID) {
-        this.schoolEmailAddressID = schoolEmailAddressID;
     }
 
     public String getUsername() {
@@ -168,7 +158,6 @@ public class Child {
                 childDto.getSurname(),
                 childDto.getDateOfBirth(),
                 childDto.getEmailAddress(),
-                childDto.getSchoolEmailAddressID(),
                 childDto.getUsername(),
                 childDto.getPassword(),
                 childDto.getDetails(),

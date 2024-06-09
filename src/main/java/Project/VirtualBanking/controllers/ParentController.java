@@ -2,8 +2,8 @@ package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
+import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
 import Project.VirtualBanking.services.ParentService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +37,30 @@ public class ParentController {
         return parentService.findParentById(parentId);
     }
 
+    @PutMapping("/parent/{parentId}/edit")
+    public ParentDto editParent(@PathVariable Integer parentId, @RequestBody ParentDto parentDto){
+        return parentService.editParent(parentId, parentDto);
+    }
+
+    @PutMapping("/parent/{parentId}/activate")
+    public ParentDto activateParent(@PathVariable Integer parentId){
+        return parentService.activateParent(parentId);
+    }
+
+    @PutMapping("/parent/{parentId}/deactivate")
+    public ParentDto deactivateParent(@PathVariable Integer parentId){
+        return parentService.deactivateParent(parentId);
+    }
+
+    @DeleteMapping("/parent/{parentId}/delete")
+    public void deleteParent(@PathVariable Integer parentId){
+        parentService.deleteParent(parentId);
+    }
+
+    /**
+     * Child related endpoints
+     */
+
     @GetMapping("/parents-with-children")
     public List<ParentWithChildrenDto> findAllParentsWithChildren() {
         return parentService.findAllParentsWithChildren();
@@ -57,23 +81,27 @@ public class ParentController {
         return parentService.findParentWithActiveChildrenByParentId(parentId);
     }
 
-    @PutMapping("/parent/{parentId}/edit")
-    public ParentDto editParent(@PathVariable Integer parentId, @RequestBody ParentDto parentDto){
-        return parentService.editParent(parentId, parentDto);
+    /**
+     * PaymentMethod related endpoints
+     */
+
+    @GetMapping("/parents-with-payment-methods")
+    public List<ParentWithPaymentMethodsDto> findAllParentsWithPaymentMethods() {
+        return parentService.findAllParentsWithPaymentMethods();
     }
 
-    @PutMapping("/parent/{parentId}/activate")
-    public ParentDto activateParent(@PathVariable Integer parentId){
-        return parentService.activateParent(parentId);
+    @GetMapping("/parents-with-payment-methods/active")
+    public List<ParentWithPaymentMethodsDto> findAllActiveParentsWithActivePaymentMethods() {
+        return parentService.findAllActiveParentsWithActivePaymentMethods();
     }
 
-    @PutMapping("/parent/{parentId}/deactivate")
-    public ParentDto deactivateParent(@PathVariable Integer parentId){
-        return parentService.deactivateParent(parentId);
+    @GetMapping("/parent/{parentId}/payment-methods")
+    public ParentWithPaymentMethodsDto findParentWithPaymentMethodsByParentId(@PathVariable Integer parentId) {
+        return parentService.findParentWithPaymentMethodsByParentId(parentId);
     }
 
-    @DeleteMapping("/parent/{parentId}/delete")
-    public void deleteParent(@PathVariable Integer parentId){
-        parentService.deleteParent(parentId);
+    @GetMapping("/parent/{parentId}/payment-methods/active")
+    public ParentWithPaymentMethodsDto findParentWithActivePaymentMethodsByParentId(@PathVariable Integer parentId) {
+        return parentService.findParentWithActivePaymentMethodsByParentId(parentId);
     }
 }

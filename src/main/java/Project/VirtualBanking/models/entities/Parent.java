@@ -44,7 +44,12 @@ public class Parent {
     private EncryptionKey encryptionKey;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OrderBy("active DESC")
     private List<Child> children;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OrderBy("active DESC")
+    private List<PaymentMethod> paymentMethods;
 
     public Parent() {
     }
@@ -133,6 +138,13 @@ public class Parent {
         this.details = details;
     }
 
+    public EncryptionKey getEncryptionKey() {
+        return encryptionKey;
+    }
+    public void setEncryptionKey(EncryptionKey encryptionKey) {
+        this.encryptionKey = encryptionKey;
+    }
+
     public List<Child> getChildren() {
         return children;
     }
@@ -140,11 +152,11 @@ public class Parent {
         this.children = children;
     }
 
-    public EncryptionKey getEncryptionKey() {
-        return encryptionKey;
+    public List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
     }
-    public void setEncryptionKey(EncryptionKey encryptionKey) {
-        this.encryptionKey = encryptionKey;
+    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
     }
 
     public static Parent fromDto(ParentDto parentDto, EncryptionKey encryptionKey){

@@ -2,7 +2,6 @@ package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.EncryptionKeyDto;
 import Project.VirtualBanking.services.EncryptionKeyService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

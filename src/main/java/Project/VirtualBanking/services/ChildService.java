@@ -4,7 +4,6 @@ import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.entities.Child;
 import Project.VirtualBanking.models.entities.EncryptionKey;
-import Project.VirtualBanking.models.entities.Parent;
 import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
@@ -12,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service

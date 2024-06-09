@@ -13,7 +13,6 @@ public class ChildDto {
     private String surname;
     private LocalDate dateOfBirth;
     private String emailAddress;
-    private String schoolEmailAddressID;
     private String username;
     private String password;
     private LocalDateTime accountCreationDate;
@@ -24,14 +23,13 @@ public class ChildDto {
     }
 
     public ChildDto(Integer childId, String name, String surname, LocalDate dateOfBirth, String emailAddress,
-                    String schoolEmailAddressID, String username, String password, LocalDateTime accountCreationDate,
+                    String username, String password, LocalDateTime accountCreationDate,
                     boolean active, String details) {
         this.childId = childId;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.emailAddress = emailAddress;
-        this.schoolEmailAddressID = schoolEmailAddressID;
         this.username = username;
         this.password = password;
         this.accountCreationDate = accountCreationDate;
@@ -72,13 +70,6 @@ public class ChildDto {
     }
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public String getSchoolEmailAddressID() {
-        return schoolEmailAddressID;
-    }
-    public void setSchoolEmailAddressID(String schoolEmailAddressID) {
-        this.schoolEmailAddressID = schoolEmailAddressID;
     }
 
     public String getUsername() {
@@ -123,7 +114,6 @@ public class ChildDto {
                 child.getSurname(),
                 child.getDateOfBirth(),
                 child.getEmailAddress(),
-                child.getSchoolEmailAddressID(),
                 child.getUsername(),
                 child.getPassword(),
                 child.getAccountCreationDate(),
