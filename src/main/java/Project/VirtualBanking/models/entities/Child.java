@@ -1,10 +1,12 @@
 package Project.VirtualBanking.models.entities;
 
 
+import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Child {
@@ -37,7 +39,7 @@ public class Child {
     @Column(nullable = false)
     private String password;
 
-    private LocalDate accountCreationDate;
+    private LocalDateTime accountCreationDate;
 
     private boolean active;
 
@@ -51,7 +53,8 @@ public class Child {
     }
 
     public Child(Parent parent, String name, String surname, LocalDate dateOfBirth,
-                 String emailAddress, String schoolEmailAddressID, String username, String password, String details) {
+                 String emailAddress, String schoolEmailAddressID, String username, String password, String details,
+                 EncryptionKey encryptionKey) {
         this.parent = parent;
         this.name = name;
         this.surname = surname;
@@ -60,9 +63,10 @@ public class Child {
         this.schoolEmailAddressID = schoolEmailAddressID;
         this.username = username;
         this.password = password;
-        this.accountCreationDate = LocalDate.now();
+        this.accountCreationDate = LocalDateTime.now();
         this.active = true;
         this.details = details;
+        this.encryptionKey = encryptionKey;
     }
 
     public Integer getChildId() {
@@ -128,10 +132,10 @@ public class Child {
         this.password = password;
     }
 
-    public LocalDate getAccountCreationDate() {
+    public LocalDateTime getAccountCreationDate() {
         return accountCreationDate;
     }
-    public void setAccountCreationDate(LocalDate accountCreationDate) {
+    public void setAccountCreationDate(LocalDateTime accountCreationDate) {
         this.accountCreationDate = accountCreationDate;
     }
 
@@ -150,8 +154,15 @@ public class Child {
         this.details = details;
     }
 
-    public static Child fromDto(ChildDto childDto, Parent parent) {
-        return new Child(
+    public EncryptionKey getEncryptionKey() {
+        return encryptionKey;
+    }
+    public void setEncryptionKey(EncryptionKey encryptionKey) {
+        this.encryptionKey = encryptionKey;
+    }
+
+    public static Child fromDto(ChildDto childDto, Parent parent, EncryptionKey encryptionKey) {
+        Child child = new Child(
                 parent,
                 childDto.getName(),
                 childDto.getSurname(),
@@ -160,7 +171,10 @@ public class Child {
                 childDto.getSchoolEmailAddressID(),
                 childDto.getUsername(),
                 childDto.getPassword(),
-                childDto.getDetails()
+                childDto.getDetails(),
+                encryptionKey
         );
+        EncryptChild.encryptChild(child, child.getEncryptionKey().getEncryptionKey());
+        return child;
     }
 }

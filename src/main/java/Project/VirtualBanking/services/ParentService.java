@@ -1,6 +1,6 @@
 package Project.VirtualBanking.services;
 
-import Project.VirtualBanking.models.EncryptEntities.EncryptParent;
+import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
@@ -81,14 +81,14 @@ public class ParentService {
         Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
         BeanUtils.copyProperties(parentDto, parent, "parentId", "accountCreationDate", "active");
         EncryptParent.encryptParent(parent, parent.getEncryptionKey().getEncryptionKey());
-        parentRepository.save(parent);
+        parent = parentRepository.save(parent);
         return ParentDto.fromEntity(parent);
     }
 
     public ParentDto activateParent(Integer parentId){
         Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
         parent.setActive(true);
-        parentRepository.save(parent);
+        parent = parentRepository.save(parent);
         return ParentDto.fromEntity(parent);
     }
 
@@ -96,7 +96,7 @@ public class ParentService {
         Parent parent = parentRepository.findById(parentId).orElseThrow(NoSuchElementException::new);
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
-        parentRepository.save(parent);
+        parent = parentRepository.save(parent);
         return ParentDto.fromEntity(parent);
     }
 

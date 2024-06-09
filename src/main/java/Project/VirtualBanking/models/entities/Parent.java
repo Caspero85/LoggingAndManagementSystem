@@ -1,10 +1,11 @@
 package Project.VirtualBanking.models.entities;
 
-import Project.VirtualBanking.models.EncryptEntities.EncryptParent;
+import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Parent {
     @Column(nullable = false)
     private String password;
 
-    private LocalDate accountCreationDate;
+    private LocalDateTime accountCreationDate;
 
     private boolean active;
 
@@ -56,7 +57,7 @@ public class Parent {
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.accountCreationDate = LocalDate.now();
+        this.accountCreationDate = LocalDateTime.now();
         this.active = true;
         this.details = details;
         this.encryptionKey = encryptionKey;
@@ -111,10 +112,10 @@ public class Parent {
         this.password = password;
     }
 
-    public LocalDate getAccountCreationDate() {
+    public LocalDateTime getAccountCreationDate() {
         return accountCreationDate;
     }
-    public void setAccountCreationDate(LocalDate accountCreationDate) {
+    public void setAccountCreationDate(LocalDateTime accountCreationDate) {
         this.accountCreationDate = accountCreationDate;
     }
 

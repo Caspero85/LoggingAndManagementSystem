@@ -1,4 +1,4 @@
-package Project.VirtualBanking.models.EncryptEntities;
+package Project.VirtualBanking.Encryption.EncryptEntities;
 
 import Project.VirtualBanking.Encryption.EncrytpionMethods;
 import Project.VirtualBanking.models.dtos.ParentDto;

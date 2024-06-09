@@ -1,8 +1,10 @@
 package Project.VirtualBanking.models.dtos;
 
+import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
 import Project.VirtualBanking.models.entities.Child;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ChildDto {
 
@@ -14,7 +16,7 @@ public class ChildDto {
     private String schoolEmailAddressID;
     private String username;
     private String password;
-    private LocalDate accountCreationDate;
+    private LocalDateTime accountCreationDate;
     private boolean active;
     private String details;
 
@@ -22,7 +24,7 @@ public class ChildDto {
     }
 
     public ChildDto(Integer childId, String name, String surname, LocalDate dateOfBirth, String emailAddress,
-                    String schoolEmailAddressID, String username, String password, LocalDate accountCreationDate,
+                    String schoolEmailAddressID, String username, String password, LocalDateTime accountCreationDate,
                     boolean active, String details) {
         this.childId = childId;
         this.name = name;
@@ -93,10 +95,10 @@ public class ChildDto {
         this.password = password;
     }
 
-    public LocalDate getAccountCreationDate() {
+    public LocalDateTime getAccountCreationDate() {
         return accountCreationDate;
     }
-    public void setAccountCreationDate(LocalDate accountCreationDate) {
+    public void setAccountCreationDate(LocalDateTime accountCreationDate) {
         this.accountCreationDate = accountCreationDate;
     }
 
@@ -115,7 +117,7 @@ public class ChildDto {
     }
 
     public static ChildDto fromEntity(Child child){
-        return new ChildDto(
+        ChildDto childDto = new ChildDto(
                 child.getChildId(),
                 child.getName(),
                 child.getSurname(),
@@ -128,5 +130,7 @@ public class ChildDto {
                 child.isActive(),
                 child.getDetails()
         );
+        EncryptChild.decryptChild(childDto, child.getEncryptionKey().getEncryptionKey());
+        return childDto;
     }
 }

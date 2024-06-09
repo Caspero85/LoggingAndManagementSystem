@@ -1,9 +1,10 @@
 package Project.VirtualBanking.models.dtos;
 
-import Project.VirtualBanking.models.EncryptEntities.EncryptParent;
+import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
 import Project.VirtualBanking.models.entities.Parent;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ParentDto {
 
@@ -14,7 +15,7 @@ public class ParentDto {
     private String emailAddress;
     private String phoneNumber;
     private String password;
-    private LocalDate accountCreationDate;
+    private LocalDateTime accountCreationDate;
     private boolean active;
     private String details;
 
@@ -22,7 +23,7 @@ public class ParentDto {
     }
 
     public ParentDto(Integer parentId, String name, String surname, LocalDate dateOfBirth, String emailAddress,
-                     String phoneNumber, String password, LocalDate accountCreationDate, boolean active, String details) {
+                     String phoneNumber, String password, LocalDateTime accountCreationDate, boolean active, String details) {
         this.parentId = parentId;
         this.name = name;
         this.surname = surname;
@@ -84,10 +85,10 @@ public class ParentDto {
         this.password = password;
     }
 
-    public LocalDate getAccountCreationDate() {
+    public LocalDateTime getAccountCreationDate() {
         return accountCreationDate;
     }
-    public void setAccountCreationDate(LocalDate accountCreationDate) {
+    public void setAccountCreationDate(LocalDateTime accountCreationDate) {
         this.accountCreationDate = accountCreationDate;
     }
 

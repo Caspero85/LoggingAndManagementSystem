@@ -19,7 +19,7 @@ public class ChildController {
 
     @PostMapping("parent/{parentId}/child")
     public ResponseEntity<ChildDto> saveChild(@RequestBody ChildDto childDto, @PathVariable Integer parentId) {
-        return ResponseEntity.ok(childService.saveChild(parentId, childDto));
+        return ResponseEntity.ok(childService.saveChild(childDto, parentId));
     }
 
     @GetMapping("/children")
@@ -39,7 +39,7 @@ public class ChildController {
 
     @PutMapping("/child/{childId}/edit")
     public ResponseEntity<ChildDto> editChildren(@PathVariable Integer childId, @RequestBody ChildDto childDto) {
-        return ResponseEntity.ok(childService.editChildren(childId, childDto));
+        return ResponseEntity.ok(childService.editChildren(childDto, childId));
     }
 
     @PutMapping("/child/{childId}/activate")
