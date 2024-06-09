@@ -41,7 +41,7 @@ public class Child {
 
     private boolean active;
 
-    private Integer details;
+    private String details;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "keyID", referencedColumnName = "keyID")
