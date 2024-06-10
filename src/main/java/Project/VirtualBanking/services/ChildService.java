@@ -25,7 +25,7 @@ public class ChildService {
         this.encryptionKeyRepository = encryptionKeyRepository;
     }
 
-    public ChildDto saveChild(ChildDto childDto, Integer parentId){
+    public ChildDto saveChild(ChildDto childDto, Integer parentId) {
         return ChildDto.fromEntity(childRepository.save(Child.fromDto(
                 childDto,
                 parentRepository.findById(parentId).orElseThrow(),
@@ -34,38 +34,51 @@ public class ChildService {
         )));
     }
 
-    public List<ChildDto> findAllChildren(){
+    public List<ChildDto> findAllChildren() {
         return childRepository.findAll().stream().map(child -> ChildDto.fromEntity(child)).collect(Collectors.toList());
     }
 
-    public List<ChildDto> findAllActiveChildren(){
+    public List<ChildDto> findAllActiveChildren() {
         return childRepository.findAll().stream().filter(child -> child.isActive())
                 .map(child -> ChildDto.fromEntity(child)).collect(Collectors.toList());
     }
 
-    public ChildDto findChildById(Integer childId){
+    public ChildDto findChildById(Integer childId) {
         return ChildDto.fromEntity(childRepository.findById(childId).orElseThrow());
     }
 
-    public ChildDto editChildren(ChildDto childDto, Integer childId){
+    public ChildDto editChildren(ChildDto childDto, Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
-        BeanUtils.copyProperties(childDto, child, "childID", "accountCreationDate", "active");
+        if (!child.getEmailAddress().equals(childDto.getEmailAddress())) {
+            child.setEmailAddressVerified(false);
+        }
+        BeanUtils.copyProperties(
+                childDto,
+                child,
+                "childId", "emailAddressVerified", "accountCreationDate", "active"
+        );
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
-    public ChildDto activateChildren(Integer childId){
+    public ChildDto activateChildren(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(true);
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
-    public ChildDto deactivateChildren(Integer childId){
+    public ChildDto verifyEmailAddress(Integer childId) {
+        Child child = childRepository.findById(childId).orElseThrow();
+        child.setEmailAddressVerified(true);
+        return ChildDto.fromEntity(childRepository.save(child));
+    }
+
+    public ChildDto deactivateChildren(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(false);
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
-    public void deleteChild(Integer childId){
+    public void deleteChild(Integer childId) {
         childRepository.deleteById(childId);
     }
 }

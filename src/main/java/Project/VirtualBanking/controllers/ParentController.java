@@ -14,52 +14,52 @@ public class ParentController {
 
     private final ParentService parentService;
 
-    public ParentController(ParentService parentService){
+    public ParentController(ParentService parentService) {
         this.parentService = parentService;
     }
 
     @PostMapping("/parent")
-    public ResponseEntity<ParentDto> saveParent(@RequestBody ParentDto parentDto){
+    public ResponseEntity<ParentDto> saveParent(@RequestBody ParentDto parentDto) {
         return ResponseEntity.ok(parentService.saveParent(parentDto));
     }
 
     @GetMapping("/parents")
-    public ResponseEntity<List<ParentDto>> findAllParents(){
+    public ResponseEntity<List<ParentDto>> findAllParents() {
         return ResponseEntity.ok(parentService.findAllParents());
     }
 
     @GetMapping("/parents/active")
-    public ResponseEntity<List<ParentDto>> findAllActiveParents(){
+    public ResponseEntity<List<ParentDto>> findAllActiveParents() {
         return ResponseEntity.ok(parentService.findAllActiveParents());
     }
 
     @GetMapping("/parent/{parentId}")
-    public ResponseEntity<ParentDto> findParentById(@PathVariable Integer parentId){
+    public ResponseEntity<ParentDto> findParentById(@PathVariable Integer parentId) {
         return ResponseEntity.ok(parentService.findParentById(parentId));
     }
 
     @PutMapping("/parent/{parentId}/edit")
-    public ResponseEntity<ParentDto> editParent(@PathVariable Integer parentId, @RequestBody ParentDto parentDto){
+    public ResponseEntity<ParentDto> editParent(@PathVariable Integer parentId, @RequestBody ParentDto parentDto) {
         return ResponseEntity.ok(parentService.editParent(parentId, parentDto));
     }
 
     @PutMapping("/parent/{parentId}/activate")
-    public ResponseEntity<ParentDto> activateParent(@PathVariable Integer parentId){
+    public ResponseEntity<ParentDto> activateParent(@PathVariable Integer parentId) {
         return ResponseEntity.ok(parentService.activateParent(parentId));
     }
 
     @PutMapping("/parent/{parentId}/deactivate")
-    public ResponseEntity<ParentDto> deactivateParent(@PathVariable Integer parentId){
+    public ResponseEntity<ParentDto> deactivateParent(@PathVariable Integer parentId) {
         return ResponseEntity.ok(parentService.deactivateParent(parentId));
     }
 
     @PutMapping("/parent/{parentId}/verify-email")
-    public ResponseEntity<ParentDto> verifyEmailAddress(@PathVariable Integer parentId){
+    public ResponseEntity<ParentDto> verifyEmailAddress(@PathVariable Integer parentId) {
         return ResponseEntity.ok(parentService.verifyEmailAddress(parentId));
     }
 
     @DeleteMapping("/parent/{parentId}/delete")
-    public ResponseEntity<Void> deleteParent(@PathVariable Integer parentId){
+    public ResponseEntity<Void> deleteParent(@PathVariable Integer parentId) {
         parentService.deleteParent(parentId);
         return ResponseEntity.noContent().build();
     }
@@ -79,12 +79,14 @@ public class ParentController {
     }
 
     @GetMapping("/parent/{parentId}/children")
-    public ResponseEntity<ParentWithChildrenDto> findParentWithChildrenByParentId(@PathVariable Integer parentId){
+    public ResponseEntity<ParentWithChildrenDto> findParentWithChildrenByParentId(@PathVariable Integer parentId) {
         return ResponseEntity.ok(parentService.findParentWithChildrenByParentId(parentId));
     }
 
     @GetMapping("/parent/{parentId}/children/active")
-    public ResponseEntity<ParentWithChildrenDto> findParentWithActiveChildrenByParentId(@PathVariable Integer parentId){
+    public ResponseEntity<ParentWithChildrenDto> findParentWithActiveChildrenByParentId(
+            @PathVariable Integer parentId
+    ) {
         return ResponseEntity.ok(parentService.findParentWithActiveChildrenByParentId(parentId));
     }
 
@@ -103,12 +105,16 @@ public class ParentController {
     }
 
     @GetMapping("/parent/{parentId}/payment-methods")
-    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithPaymentMethodsByParentId(@PathVariable Integer parentId) {
+    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithPaymentMethodsByParentId(
+            @PathVariable Integer parentId
+    ) {
         return ResponseEntity.ok(parentService.findParentWithPaymentMethodsByParentId(parentId));
     }
 
     @GetMapping("/parent/{parentId}/payment-methods/active")
-    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithActivePaymentMethodsByParentId(@PathVariable Integer parentId) {
+    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithActivePaymentMethodsByParentId(
+            @PathVariable Integer parentId
+    ) {
         return ResponseEntity.ok(parentService.findParentWithActivePaymentMethodsByParentId(parentId));
     }
 }

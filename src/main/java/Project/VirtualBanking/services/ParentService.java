@@ -30,21 +30,21 @@ public class ParentService {
         )));
     }
 
-    public List<ParentDto> findAllParents(){
+    public List<ParentDto> findAllParents() {
         return parentRepository.findAll().stream().map(parent -> ParentDto.fromEntity(parent))
                 .collect(Collectors.toList());
     }
 
-    public List<ParentDto> findAllActiveParents(){
+    public List<ParentDto> findAllActiveParents() {
         return parentRepository.findAll().stream().filter(parent -> parent.isActive())
                 .map(parent -> ParentDto.fromEntity(parent)).collect(Collectors.toList());
     }
 
-    public ParentDto findParentById(Integer parentId){
+    public ParentDto findParentById(Integer parentId) {
         return ParentDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
-    public ParentDto editParent(Integer parentId, ParentDto parentDto){
+    public ParentDto editParent(Integer parentId, ParentDto parentDto) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();;
         if (!parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
             parent.setEmailAddressVerified(false);
@@ -57,13 +57,13 @@ public class ParentService {
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
-    public ParentDto activateParent(Integer parentId){
+    public ParentDto activateParent(Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(true);
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
-    public ParentDto deactivateParent(Integer parentId){
+    public ParentDto deactivateParent(Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
@@ -71,13 +71,13 @@ public class ParentService {
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
-    public ParentDto verifyEmailAddress(Integer parentId){
+    public ParentDto verifyEmailAddress(Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setEmailAddressVerified(true);
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
-    public void deleteParent(Integer parentId){
+    public void deleteParent(Integer parentId) {
         parentRepository.deleteById(parentId);
     }
 
@@ -85,12 +85,12 @@ public class ParentService {
      * Child related methods
      */
 
-    public List<ParentWithChildrenDto> findAllParentsWithChildren(){
+    public List<ParentWithChildrenDto> findAllParentsWithChildren() {
         return parentRepository.findAll().stream().map(parent -> ParentWithChildrenDto.fromEntity(parent))
                 .collect(Collectors.toList());
     }
 
-    public List<ParentWithChildrenDto> findAllActiveParentsWithActiveChildren(){
+    public List<ParentWithChildrenDto> findAllActiveParentsWithActiveChildren() {
         List<ParentWithChildrenDto> parentsWithChildrenDto = parentRepository.findAll().stream()
                 .filter(parent -> parent.isActive()).map(parent -> ParentWithChildrenDto.fromEntity(parent))
                 .collect(Collectors.toList());
@@ -104,7 +104,7 @@ public class ParentService {
         return parentsWithChildrenDto;
     }
 
-    public ParentWithChildrenDto findParentWithChildrenByParentId (Integer parentId){
+    public ParentWithChildrenDto findParentWithChildrenByParentId (Integer parentId) {
         return ParentWithChildrenDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
@@ -123,7 +123,7 @@ public class ParentService {
      * PaymentMethod related methods
      */
 
-    public List<ParentWithPaymentMethodsDto> findAllParentsWithPaymentMethods(){
+    public List<ParentWithPaymentMethodsDto> findAllParentsWithPaymentMethods() {
         return parentRepository.findAll().stream()
                 .map(parent -> ParentWithPaymentMethodsDto.fromEntity(parent))
                 .collect(Collectors.toList());
@@ -144,11 +144,11 @@ public class ParentService {
         return parentsWithPaymentMethodsDto;
     }
 
-    public ParentWithPaymentMethodsDto findParentWithPaymentMethodsByParentId(Integer parentId){
+    public ParentWithPaymentMethodsDto findParentWithPaymentMethodsByParentId(Integer parentId) {
         return ParentWithPaymentMethodsDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
-    public ParentWithPaymentMethodsDto findParentWithActivePaymentMethodsByParentId(Integer parentId){
+    public ParentWithPaymentMethodsDto findParentWithActivePaymentMethodsByParentId(Integer parentId) {
         ParentWithPaymentMethodsDto parentWithPaymentMethodsDto = ParentWithPaymentMethodsDto.fromEntity(
                 parentRepository.findById(parentId).orElseThrow()
         );

@@ -52,6 +52,11 @@ public class ChildController {
         return ResponseEntity.ok(childService.deactivateChildren(childId));
     }
 
+    @PutMapping("/child/{childId}/verify-email")
+    public ResponseEntity<ChildDto> verifyEmailAddress(@PathVariable Integer childId) {
+        return ResponseEntity.ok(childService.verifyEmailAddress(childId));
+    }
+
     @DeleteMapping("/child/{childId}/delete")
     public ResponseEntity<Void> deleteChild(@PathVariable Integer childId) {
         childService.deleteChild(childId);
