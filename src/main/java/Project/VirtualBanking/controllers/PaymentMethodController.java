@@ -2,6 +2,7 @@ package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.PaymentMethodDto;
 import Project.VirtualBanking.services.PaymentMethodService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,48 +17,49 @@ public class PaymentMethodController {
     }
 
     @PostMapping("/parent/{parentId}/payment-method")
-    public PaymentMethodDto savePaymentMethod(
+    public ResponseEntity<PaymentMethodDto> savePaymentMethod(
             @RequestBody PaymentMethodDto paymentMethodDto,
             @PathVariable Integer parentId
     ) {
-        return paymentMethodService.savePaymentMethod(paymentMethodDto, parentId);
+        return ResponseEntity.ok(paymentMethodService.savePaymentMethod(paymentMethodDto, parentId));
     }
 
     @GetMapping("/payment-methods")
-    public List<PaymentMethodDto> findAllPaymentMethods() {
-        return paymentMethodService.findAllPaymentMethods();
+    public ResponseEntity<List<PaymentMethodDto>> findAllPaymentMethods() {
+        return ResponseEntity.ok(paymentMethodService.findAllPaymentMethods());
     }
 
     @GetMapping("/payment-methods/active")
-    public List<PaymentMethodDto> findAllActivePaymentMethods() {
-        return paymentMethodService.findAllActivePaymentMethods();
+    public ResponseEntity<List<PaymentMethodDto>> findAllActivePaymentMethods() {
+        return ResponseEntity.ok(paymentMethodService.findAllActivePaymentMethods());
     }
 
     @GetMapping("/payment-method/{paymentMethodId}")
-    public PaymentMethodDto findPaymentMethodById(@PathVariable Integer paymentMethodId) {
-        return paymentMethodService.findPaymentMethodById(paymentMethodId);
+    public ResponseEntity<PaymentMethodDto> findPaymentMethodById(@PathVariable Integer paymentMethodId) {
+        return ResponseEntity.ok(paymentMethodService.findPaymentMethodById(paymentMethodId));
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/edit")
-    public PaymentMethodDto editPaymentMethod(
+    public ResponseEntity<PaymentMethodDto> editPaymentMethod(
             @PathVariable Integer paymentMethodId,
             @RequestBody PaymentMethodDto paymentMethodDto
     ) {
-        return paymentMethodService.editPaymentMethod(paymentMethodDto, paymentMethodId);
+        return ResponseEntity.ok(paymentMethodService.editPaymentMethod(paymentMethodDto, paymentMethodId));
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/activate")
-    public PaymentMethodDto activatePaymentMethod(@PathVariable Integer paymentMethodId) {
-        return paymentMethodService.activatePaymentMethod(paymentMethodId);
+    public ResponseEntity<PaymentMethodDto> activatePaymentMethod(@PathVariable Integer paymentMethodId) {
+        return ResponseEntity.ok(paymentMethodService.activatePaymentMethod(paymentMethodId));
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/deactivate")
-    public PaymentMethodDto deactivatePaymentMethod(@PathVariable Integer paymentMethodId) {
-        return paymentMethodService.deactivatePaymentMethod(paymentMethodId);
+    public ResponseEntity<PaymentMethodDto> deactivatePaymentMethod(@PathVariable Integer paymentMethodId) {
+        return ResponseEntity.ok(paymentMethodService.deactivatePaymentMethod(paymentMethodId));
     }
 
     @DeleteMapping("/payment-method/{paymentMethodId}/delete")
-    public void deletePaymentMethod(@PathVariable Integer paymentMethodId) {
+    public ResponseEntity<Void> deletePaymentMethod(@PathVariable Integer paymentMethodId) {
         paymentMethodService.deletePaymentMethod(paymentMethodId);
+        return ResponseEntity.noContent().build();
     }
 }

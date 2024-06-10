@@ -1,6 +1,5 @@
 package Project.VirtualBanking.models.dtos;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
 import Project.VirtualBanking.models.entities.Child;
 
 import java.time.LocalDate;
@@ -108,7 +107,7 @@ public class ChildDto {
     }
 
     public static ChildDto fromEntity(Child child){
-        ChildDto childDto = new ChildDto(
+        return new ChildDto(
                 child.getChildId(),
                 child.getName(),
                 child.getSurname(),
@@ -120,7 +119,5 @@ public class ChildDto {
                 child.isActive(),
                 child.getDetails()
         );
-        EncryptChild.decryptChild(childDto, child.getEncryptionKey().getEncryptionKey());
-        return childDto;
     }
 }

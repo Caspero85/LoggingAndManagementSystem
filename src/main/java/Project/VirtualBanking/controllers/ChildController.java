@@ -2,6 +2,7 @@ package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.services.ChildService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,42 +18,43 @@ public class ChildController {
     }
 
     @PostMapping("parent/{parentId}/child")
-    public ChildDto saveChild(@RequestBody ChildDto childDto, @PathVariable Integer parentId) {
-        return childService.saveChild(childDto, parentId);
+    public ResponseEntity<ChildDto> saveChild(@RequestBody ChildDto childDto, @PathVariable Integer parentId) {
+        return ResponseEntity.ok(childService.saveChild(childDto, parentId));
     }
 
     @GetMapping("/children")
-    public List<ChildDto> findAllChildren() {
-        return childService.findAllChildren();
+    public ResponseEntity<List<ChildDto>> findAllChildren() {
+        return ResponseEntity.ok(childService.findAllChildren());
     }
 
     @GetMapping("/children/active")
-    public List<ChildDto> findAllActiveChildren() {
-        return childService.findAllActiveChildren();
+    public ResponseEntity<List<ChildDto>> findAllActiveChildren() {
+        return ResponseEntity.ok(childService.findAllActiveChildren());
     }
 
     @GetMapping("/child/{childId}")
-    public ChildDto findChildById(@PathVariable Integer childId) {
-        return childService.findChildById(childId);
+    public ResponseEntity<ChildDto> findChildById(@PathVariable Integer childId) {
+        return ResponseEntity.ok(childService.findChildById(childId));
     }
 
     @PutMapping("/child/{childId}/edit")
-    public ChildDto editChildren(@PathVariable Integer childId, @RequestBody ChildDto childDto) {
-        return childService.editChildren(childDto, childId);
+    public ResponseEntity<ChildDto> editChildren(@PathVariable Integer childId, @RequestBody ChildDto childDto) {
+        return ResponseEntity.ok(childService.editChildren(childDto, childId));
     }
 
     @PutMapping("/child/{childId}/activate")
-    public ChildDto activateChildren(@PathVariable Integer childId) {
-        return childService.activateChildren(childId);
+    public ResponseEntity<ChildDto> activateChildren(@PathVariable Integer childId) {
+        return ResponseEntity.ok(childService.activateChildren(childId));
     }
 
     @PutMapping("/child/{childId}/deactivate")
-    public ChildDto deactivateChildren(@PathVariable Integer childId) {
-        return childService.deactivateChildren(childId);
+    public ResponseEntity<ChildDto> deactivateChildren(@PathVariable Integer childId) {
+        return ResponseEntity.ok(childService.deactivateChildren(childId));
     }
 
     @DeleteMapping("/child/{childId}/delete")
-    public void deleteChild(@PathVariable Integer childId) {
+    public ResponseEntity<Void> deleteChild(@PathVariable Integer childId) {
         childService.deleteChild(childId);
+        return ResponseEntity.noContent().build();
     }
 }

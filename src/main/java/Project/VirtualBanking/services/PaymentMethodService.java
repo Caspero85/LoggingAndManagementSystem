@@ -1,6 +1,5 @@
 package Project.VirtualBanking.services;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptPaymentMethod;
 import Project.VirtualBanking.models.dtos.PaymentMethodDto;
 import Project.VirtualBanking.models.entities.EncryptionKey;
 import Project.VirtualBanking.models.entities.Parent;
@@ -60,7 +59,6 @@ public class PaymentMethodService {
                 paymentMethod,
                 "paymentInfoID", "paymentMethodAddedDate", "active"
         );
-        EncryptPaymentMethod.encryptPaymentMethod(paymentMethod, paymentMethod.getEncryptionKey().getEncryptionKey());
         return PaymentMethodDto.fromEntity(paymentMethodRepository.save(paymentMethod));
     }
 

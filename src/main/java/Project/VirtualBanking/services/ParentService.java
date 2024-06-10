@@ -1,7 +1,5 @@
 package Project.VirtualBanking.services;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
-import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
 import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
@@ -28,8 +26,7 @@ public class ParentService {
     public ParentDto saveParent(ParentDto parentDto){
         return ParentDto.fromEntity(parentRepository.save(Parent.fromDto(
                 parentDto,
-                encryptionKeyRepository.save(new EncryptionKey()
-                )
+                encryptionKeyRepository.save(new EncryptionKey())
         )));
     }
 
@@ -48,9 +45,15 @@ public class ParentService {
     }
 
     public ParentDto editParent(Integer parentId, ParentDto parentDto){
-        Parent parent = parentRepository.findById(parentId).orElseThrow();
-        BeanUtils.copyProperties(parentDto, parent, "parentId", "accountCreationDate", "active");
-        EncryptParent.encryptParent(parent, parent.getEncryptionKey().getEncryptionKey());
+        Parent parent = parentRepository.findById(parentId).orElseThrow();;
+        if (!parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
+            parent.setEmailAddressVerified(false);
+        }
+        BeanUtils.copyProperties(
+                parentDto,
+                parent,
+                "parentId", "emailAddressVerified", "accountCreationDate", "active"
+        );
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
@@ -65,6 +68,12 @@ public class ParentService {
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
         parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
+        return ParentDto.fromEntity(parentRepository.save(parent));
+    }
+
+    public ParentDto verifyEmailAddress(Integer parentId){
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
+        parent.setEmailAddressVerified(true);
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
@@ -145,7 +154,8 @@ public class ParentService {
         );
 
         parentWithPaymentMethodsDto.setPaymentMethodsDto(
-                parentWithPaymentMethodsDto.getPaymentMethodsDto().stream().filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList())
+                parentWithPaymentMethodsDto.getPaymentMethodsDto().stream()
+                        .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList())
         );
         return parentWithPaymentMethodsDto;
     }

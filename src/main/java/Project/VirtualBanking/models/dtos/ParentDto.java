@@ -1,6 +1,5 @@
 package Project.VirtualBanking.models.dtos;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
 import Project.VirtualBanking.models.entities.Parent;
 
 import java.time.LocalDate;
@@ -13,22 +12,25 @@ public class ParentDto {
     private String surname;
     private LocalDate dateOfBirth;
     private String emailAddress;
+    private Boolean emailAddressVerified;
     private String phoneNumber;
     private String password;
     private LocalDateTime accountCreationDate;
-    private boolean active;
+    private Boolean active;
     private String details;
 
     public ParentDto() {
     }
 
     public ParentDto(Integer parentId, String name, String surname, LocalDate dateOfBirth, String emailAddress,
-                     String phoneNumber, String password, LocalDateTime accountCreationDate, boolean active, String details) {
+                     Boolean emailAddressVerified, String phoneNumber, String password,
+                     LocalDateTime accountCreationDate, Boolean active, String details) {
         this.parentId = parentId;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.emailAddress = emailAddress;
+        this.emailAddressVerified = emailAddressVerified;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.accountCreationDate = accountCreationDate;
@@ -71,6 +73,13 @@ public class ParentDto {
         this.emailAddress = emailAddress;
     }
 
+    public Boolean getEmailAddressVerified() {
+        return emailAddressVerified;
+    }
+    public void setEmailAddressVerified(Boolean emailAddressVerified) {
+        this.emailAddressVerified = emailAddressVerified;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -92,10 +101,10 @@ public class ParentDto {
         this.accountCreationDate = accountCreationDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -107,19 +116,18 @@ public class ParentDto {
     }
 
     public static ParentDto fromEntity(Parent parent){
-        ParentDto parentDto = new ParentDto(
+        return new ParentDto(
                 parent.getParentId(),
                 parent.getName(),
                 parent.getSurname(),
                 parent.getDateOfBirth(),
                 parent.getEmailAddress(),
+                parent.isEmailAddressVerified(),
                 parent.getPhoneNumber(),
                 parent.getPassword(),
                 parent.getAccountCreationDate(),
                 parent.isActive(),
                 parent.getDetails()
         );
-        EncryptParent.decryptParent(parentDto, parent.getEncryptionKey().getEncryptionKey());
-        return parentDto;
     }
 }

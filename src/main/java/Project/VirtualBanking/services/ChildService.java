@@ -1,6 +1,5 @@
 package Project.VirtualBanking.services;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.entities.Child;
 import Project.VirtualBanking.models.entities.EncryptionKey;
@@ -51,7 +50,6 @@ public class ChildService {
     public ChildDto editChildren(ChildDto childDto, Integer childId){
         Child child = childRepository.findById(childId).orElseThrow();
         BeanUtils.copyProperties(childDto, child, "childID", "accountCreationDate", "active");
-        EncryptChild.encryptChild(child, child.getEncryptionKey().getEncryptionKey());
         return ChildDto.fromEntity(childRepository.save(child));
     }
 

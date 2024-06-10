@@ -1,6 +1,6 @@
 package Project.VirtualBanking.models.entities;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptPaymentMethod;
+import Project.VirtualBanking.Encryption.EncryptionMethods;
 import Project.VirtualBanking.models.dtos.PaymentMethodDto;
 import jakarta.persistence.*;
 
@@ -74,38 +74,38 @@ public class PaymentMethod {
     }
 
     public String getCardNumber() {
-        return cardNumber;
+        return EncryptionMethods.decryptData(cardNumber, encryptionKey.getEncryptionKey());
     }
     public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+        this.cardNumber = EncryptionMethods.encryptData(cardNumber, encryptionKey.getEncryptionKey());
     }
 
     public String getCardHolderName() {
-        return cardHolderName;
+        return EncryptionMethods.decryptData(cardHolderName, encryptionKey.getEncryptionKey());
     }
     public void setCardHolderName(String cardHolderName) {
-        this.cardHolderName = cardHolderName;
+        this.cardHolderName = EncryptionMethods.encryptData(cardHolderName, encryptionKey.getEncryptionKey());
     }
 
     public String getCardHolderUsername() {
-        return cardHolderUsername;
+        return EncryptionMethods.decryptData(cardHolderUsername, encryptionKey.getEncryptionKey());
     }
     public void setCardHolderUsername(String cardHolderUsername) {
-        this.cardHolderUsername = cardHolderUsername;
+        this.cardHolderUsername = EncryptionMethods.encryptData(cardHolderUsername, encryptionKey.getEncryptionKey());
     }
 
     public String getExpirationDate() {
-        return expirationDate;
+        return EncryptionMethods.decryptData(expirationDate, encryptionKey.getEncryptionKey());
     }
     public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
+        this.expirationDate = EncryptionMethods.encryptData(expirationDate, encryptionKey.getEncryptionKey());
     }
 
     public String getCvv() {
-        return cvv;
+        return EncryptionMethods.decryptData(cvv, encryptionKey.getEncryptionKey());
     }
     public void setCvv(String cvv) {
-        this.cvv = cvv;
+        this.cvv = EncryptionMethods.encryptData(cvv, encryptionKey.getEncryptionKey());
     }
 
     public LocalDate getPaymentMethodAddedDate() {
@@ -136,6 +136,14 @@ public class PaymentMethod {
         this.encryptionKey = encryptionKey;
     }
 
+    public static void encryptPaymentMethod(PaymentMethod paymentMethod, PaymentMethodDto paymentMethodDto) {
+        paymentMethod.setCardNumber(paymentMethodDto.getCardNumber());
+        paymentMethod.setCardHolderName(paymentMethodDto.getCardHolderName());
+        paymentMethod.setCardHolderUsername(paymentMethodDto.getCardHolderUsername());
+        paymentMethod.setExpirationDate(paymentMethodDto.getExpirationDate());
+        paymentMethod.setCvv(paymentMethodDto.getCvv());
+    }
+
     public static PaymentMethod fromDto(PaymentMethodDto paymentMethodDto, Parent parent, EncryptionKey encryptionKey) {
         PaymentMethod paymentMethod = new PaymentMethod(
                 parent,
@@ -147,7 +155,7 @@ public class PaymentMethod {
                 paymentMethodDto.getDetails(),
                 encryptionKey
         );
-        EncryptPaymentMethod.encryptPaymentMethod(paymentMethod, paymentMethod.getEncryptionKey().getEncryptionKey());
+        encryptPaymentMethod(paymentMethod, paymentMethodDto);
         return paymentMethod;
     }
 }

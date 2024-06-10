@@ -1,7 +1,7 @@
 package Project.VirtualBanking.models.entities;
 
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptChild;
+import Project.VirtualBanking.Encryption.EncryptionMethods;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import jakarta.persistence.*;
 
@@ -102,24 +102,24 @@ public class Child {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return EncryptionMethods.decryptData(emailAddress, encryptionKey.getEncryptionKey());
     }
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.emailAddress = EncryptionMethods.encryptData(emailAddress, encryptionKey.getEncryptionKey());
     }
 
     public String getUsername() {
-        return username;
+        return EncryptionMethods.decryptData(username, encryptionKey.getEncryptionKey());
     }
     public void setUsername(String username) {
-        this.username = username;
+        this.username = EncryptionMethods.encryptData(username, encryptionKey.getEncryptionKey());
     }
 
     public String getPassword() {
-        return password;
+        return EncryptionMethods.decryptData(password, encryptionKey.getEncryptionKey());
     }
     public void setPassword(String password) {
-        this.password = password;
+        this.password = EncryptionMethods.encryptData(password, encryptionKey.getEncryptionKey());
     }
 
     public LocalDateTime getAccountCreationDate() {
@@ -151,6 +151,12 @@ public class Child {
         this.encryptionKey = encryptionKey;
     }
 
+    public static void encryptChild(Child child, ChildDto childDto) {
+        child.setEmailAddress(childDto.getEmailAddress());
+        child.setUsername(childDto.getUsername());
+        child.setPassword(childDto.getPassword());
+    }
+
     public static Child fromDto(ChildDto childDto, Parent parent, EncryptionKey encryptionKey) {
         Child child = new Child(
                 parent,
@@ -163,7 +169,7 @@ public class Child {
                 childDto.getDetails(),
                 encryptionKey
         );
-        EncryptChild.encryptChild(child, child.getEncryptionKey().getEncryptionKey());
+        encryptChild(child, childDto);
         return child;
     }
 }

@@ -1,6 +1,5 @@
 package Project.VirtualBanking.models.dtos;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptPaymentMethod;
 import Project.VirtualBanking.models.entities.PaymentMethod;
 
 import java.time.LocalDate;
@@ -98,7 +97,7 @@ public class PaymentMethodDto {
     }
 
     public static PaymentMethodDto fromEntity(PaymentMethod paymentMethod) {
-        PaymentMethodDto paymentMethodDto = new PaymentMethodDto(
+        return new PaymentMethodDto(
                 paymentMethod.getPaymentInfoID(),
                 paymentMethod.getCardNumber(),
                 paymentMethod.getCardHolderName(),
@@ -109,7 +108,5 @@ public class PaymentMethodDto {
                 paymentMethod.isActive(),
                 paymentMethod.getDetails()
         );
-        EncryptPaymentMethod.decryptPaymentMethod(paymentMethodDto, paymentMethod.getEncryptionKey().getEncryptionKey());
-        return paymentMethodDto;
     }
 }

@@ -2,6 +2,7 @@ package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.EncryptionKeyDto;
 import Project.VirtualBanking.services.EncryptionKeyService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +18,7 @@ public class EncryptionKeyController {
     }
 
     @GetMapping("/encryptionKeys")
-    public List<EncryptionKeyDto> findAllEncryptionKeys() {
-        return encryptionKeyService.findAllEncryptionKeys();
+    public ResponseEntity<List<EncryptionKeyDto>> findAllEncryptionKeys() {
+        return ResponseEntity.ok(encryptionKeyService.findAllEncryptionKeys());
     }
-
 }

@@ -1,6 +1,6 @@
 package Project.VirtualBanking.models.entities;
 
-import Project.VirtualBanking.Encryption.EncryptEntities.EncryptParent;
+import Project.VirtualBanking.Encryption.EncryptionMethods;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import jakarta.persistence.*;
 
@@ -27,6 +27,8 @@ public class Parent {
     @Column(nullable = false)
     private String emailAddress;
 
+    private Boolean emailAddressVerified;
+
     @Column(nullable = false)
     private String phoneNumber;
 
@@ -35,7 +37,7 @@ public class Parent {
 
     private LocalDateTime accountCreationDate;
 
-    private boolean active;
+    private Boolean active;
 
     private String details;
 
@@ -60,6 +62,7 @@ public class Parent {
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.emailAddress = emailAddress;
+        this.emailAddressVerified = false;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.accountCreationDate = LocalDateTime.now();
@@ -97,24 +100,31 @@ public class Parent {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return EncryptionMethods.decryptData(emailAddress, encryptionKey.getEncryptionKey());
     }
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.emailAddress = EncryptionMethods.encryptData(emailAddress, encryptionKey.getEncryptionKey());
+    }
+
+    public Boolean isEmailAddressVerified() {
+        return emailAddressVerified;
+    }
+    public void setEmailAddressVerified(Boolean emailAddressVerified) {
+        this.emailAddressVerified = emailAddressVerified;
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return EncryptionMethods.decryptData(phoneNumber, encryptionKey.getEncryptionKey());
     }
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = EncryptionMethods.encryptData(phoneNumber, encryptionKey.getEncryptionKey());
     }
 
     public String getPassword() {
-        return password;
+        return EncryptionMethods.decryptData(password, encryptionKey.getEncryptionKey());
     }
     public void setPassword(String password) {
-        this.password = password;
+        this.password = EncryptionMethods.encryptData(password, encryptionKey.getEncryptionKey());
     }
 
     public LocalDateTime getAccountCreationDate() {
@@ -124,10 +134,10 @@ public class Parent {
         this.accountCreationDate = accountCreationDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -159,6 +169,12 @@ public class Parent {
         this.paymentMethods = paymentMethods;
     }
 
+    public static void encryptParent(Parent parent, ParentDto parentDto) {
+        parent.setEmailAddress(parentDto.getEmailAddress());
+        parent.setPhoneNumber(parentDto.getPhoneNumber());
+        parent.setPassword(parentDto.getPassword());
+    }
+
     public static Parent fromDto(ParentDto parentDto, EncryptionKey encryptionKey){
         Parent parent = new Parent(
                 parentDto.getName(),
@@ -170,7 +186,7 @@ public class Parent {
                 parentDto.getDetails(),
                 encryptionKey
         );
-        EncryptParent.encryptParent(parent, parent.getEncryptionKey().getEncryptionKey());
+        encryptParent(parent, parentDto);
         return parent;
     }
 }
