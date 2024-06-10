@@ -6,6 +6,7 @@ import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
 import Project.VirtualBanking.services.ParentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,8 +20,13 @@ public class ParentController {
     }
 
     @PostMapping("/parent")
-    public ResponseEntity<ParentDto> saveParent(@RequestBody ParentDto parentDto) {
-        return ResponseEntity.ok(parentService.saveParent(parentDto));
+    public ResponseEntity<?> saveParent(@RequestBody ParentDto parentDto) {
+        try {
+            return ResponseEntity.ok(parentService.saveParent(parentDto));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parents")
@@ -39,8 +45,13 @@ public class ParentController {
     }
 
     @PutMapping("/parent/{parentId}/edit")
-    public ResponseEntity<ParentDto> editParent(@PathVariable Integer parentId, @RequestBody ParentDto parentDto) {
-        return ResponseEntity.ok(parentService.editParent(parentId, parentDto));
+    public ResponseEntity<?> editParent(@RequestBody ParentDto parentDto, @PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.editParent(parentDto, parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/parent/{parentId}/activate")

@@ -3,11 +3,14 @@ package Project.VirtualBanking.services;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.entities.Child;
 import Project.VirtualBanking.models.entities.EncryptionKey;
+import Project.VirtualBanking.models.entities.Parent;
 import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,11 +29,30 @@ public class ChildService {
     }
 
     public ChildDto saveChild(ChildDto childDto, Integer parentId) {
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
+        if (!parent.isEmailAddressVerified()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adres e-mail rodzica nie został zweryfikowany");
+        }
+        if (!parent.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
+        }
+
+        List<Child> children = childRepository.findAll();
+        for (Child child : children) {
+            if (child.getEmailAddress().equals(childDto.getEmailAddress())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany adres e-mail jest już w użyciu");
+            }
+        }
+        for (Child child : children) {
+            if (child.getUsername().equals(childDto.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podana nazwa użytkownika jest już w użyciu");
+            }
+        }
+
         return ChildDto.fromEntity(childRepository.save(Child.fromDto(
                 childDto,
-                parentRepository.findById(parentId).orElseThrow(),
-                encryptionKeyRepository.save(new EncryptionKey()
-                )
+                parent,
+                encryptionKeyRepository.save(new EncryptionKey())
         )));
     }
 
@@ -49,9 +71,14 @@ public class ChildService {
 
     public ChildDto editChildren(ChildDto childDto, Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
+        if (!child.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto dziecka jest nieaktywne");
+        }
+
         if (!child.getEmailAddress().equals(childDto.getEmailAddress())) {
             child.setEmailAddressVerified(false);
         }
+
         BeanUtils.copyProperties(
                 childDto,
                 child,

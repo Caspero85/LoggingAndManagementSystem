@@ -8,7 +8,9 @@ import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import Project.VirtualBanking.repositories.PaymentMethodRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +31,16 @@ public class PaymentMethodService {
 
     public PaymentMethodDto savePaymentMethod(PaymentMethodDto paymentMethodDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
+        if (!parent.isEmailAddressVerified()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adres e-mail rodzica nie został zweryfikowany");
+        }
+        if (!parent.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
+        }
+        if (parent.getPaymentMethods().stream().anyMatch(paymentMethod -> paymentMethod.isActive())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic ma już aktywną metodę płatności");
+        }
+
         parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
 
         return PaymentMethodDto.fromEntity(paymentMethodRepository.save(PaymentMethod.fromDto(
@@ -50,16 +62,6 @@ public class PaymentMethodService {
 
     public PaymentMethodDto findPaymentMethodById(Integer paymentMethodId) {
         return PaymentMethodDto.fromEntity(paymentMethodRepository.findById(paymentMethodId).orElseThrow());
-    }
-
-    public PaymentMethodDto editPaymentMethod(PaymentMethodDto paymentMethodDto, Integer paymentMethodId) {
-        PaymentMethod paymentMethod = paymentMethodRepository.findById(paymentMethodId).orElseThrow();
-        BeanUtils.copyProperties(
-                paymentMethodDto,
-                paymentMethod,
-                "paymentInfoID", "paymentMethodAddedDate", "active"
-        );
-        return PaymentMethodDto.fromEntity(paymentMethodRepository.save(paymentMethod));
     }
 
     public PaymentMethodDto activatePaymentMethod(Integer paymentMethodId) {

@@ -8,8 +8,11 @@ import Project.VirtualBanking.models.entities.Parent;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,22 @@ public class ParentService {
     }
 
     public ParentDto saveParent(ParentDto parentDto){
+        List<Parent> parents = parentRepository.findAll();
+        for (Parent parent : parents) {
+            if (parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany adres e-mail jest już w użyciu");
+            }
+            if (parent.getPhoneNumber().equals(parentDto.getPhoneNumber())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany numer telefonu jest już w użyciu");
+            }
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalDate eighteenYearsAgo = today.minusYears(18);
+        if (parentDto.getDateOfBirth().isAfter(eighteenYearsAgo)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic musi mieć ukończone 18 lat");
+        }
+
         return ParentDto.fromEntity(parentRepository.save(Parent.fromDto(
                 parentDto,
                 encryptionKeyRepository.save(new EncryptionKey())
@@ -44,11 +63,16 @@ public class ParentService {
         return ParentDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
-    public ParentDto editParent(Integer parentId, ParentDto parentDto) {
-        Parent parent = parentRepository.findById(parentId).orElseThrow();;
+    public ParentDto editParent(ParentDto parentDto, Integer parentId) {
+        Parent parent = parentRepository.findById(parentId).orElseThrow();
+        if(!parent.isActive()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
+        }
+
         if (!parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
             parent.setEmailAddressVerified(false);
         }
+
         BeanUtils.copyProperties(
                 parentDto,
                 parent,

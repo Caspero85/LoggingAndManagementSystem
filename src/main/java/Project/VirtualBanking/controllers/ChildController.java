@@ -4,6 +4,7 @@ import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.services.ChildService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -18,8 +19,13 @@ public class ChildController {
     }
 
     @PostMapping("parent/{parentId}/child")
-    public ResponseEntity<ChildDto> saveChild(@RequestBody ChildDto childDto, @PathVariable Integer parentId) {
-        return ResponseEntity.ok(childService.saveChild(childDto, parentId));
+    public ResponseEntity<?> saveChild(@RequestBody ChildDto childDto, @PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(childService.saveChild(childDto, parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/children")
@@ -38,8 +44,13 @@ public class ChildController {
     }
 
     @PutMapping("/child/{childId}/edit")
-    public ResponseEntity<ChildDto> editChildren(@PathVariable Integer childId, @RequestBody ChildDto childDto) {
-        return ResponseEntity.ok(childService.editChildren(childDto, childId));
+    public ResponseEntity<?> editChildren(@PathVariable Integer childId, @RequestBody ChildDto childDto) {
+        try {
+            return ResponseEntity.ok(childService.editChildren(childDto, childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/child/{childId}/activate")

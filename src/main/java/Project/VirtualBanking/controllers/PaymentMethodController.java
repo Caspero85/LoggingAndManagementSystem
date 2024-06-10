@@ -4,6 +4,7 @@ import Project.VirtualBanking.models.dtos.PaymentMethodDto;
 import Project.VirtualBanking.services.PaymentMethodService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,11 +18,16 @@ public class PaymentMethodController {
     }
 
     @PostMapping("/parent/{parentId}/payment-method")
-    public ResponseEntity<PaymentMethodDto> savePaymentMethod(
+    public ResponseEntity<?> savePaymentMethod(
             @RequestBody PaymentMethodDto paymentMethodDto,
             @PathVariable Integer parentId
     ) {
-        return ResponseEntity.ok(paymentMethodService.savePaymentMethod(paymentMethodDto, parentId));
+        try {
+            return ResponseEntity.ok(paymentMethodService.savePaymentMethod(paymentMethodDto, parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/payment-methods")
@@ -37,14 +43,6 @@ public class PaymentMethodController {
     @GetMapping("/payment-method/{paymentMethodId}")
     public ResponseEntity<PaymentMethodDto> findPaymentMethodById(@PathVariable Integer paymentMethodId) {
         return ResponseEntity.ok(paymentMethodService.findPaymentMethodById(paymentMethodId));
-    }
-
-    @PutMapping("/payment-method/{paymentMethodId}/edit")
-    public ResponseEntity<PaymentMethodDto> editPaymentMethod(
-            @PathVariable Integer paymentMethodId,
-            @RequestBody PaymentMethodDto paymentMethodDto
-    ) {
-        return ResponseEntity.ok(paymentMethodService.editPaymentMethod(paymentMethodDto, paymentMethodId));
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/activate")
