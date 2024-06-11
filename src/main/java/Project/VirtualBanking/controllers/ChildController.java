@@ -29,18 +29,33 @@ public class ChildController {
     }
 
     @GetMapping("/children")
-    public ResponseEntity<List<ChildDto>> findAllChildren() {
-        return ResponseEntity.ok(childService.findAllChildren());
+    public ResponseEntity<?> findAllChildren() {
+        try {
+            return ResponseEntity.ok(childService.findAllChildren());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/children/active")
-    public ResponseEntity<List<ChildDto>> findAllActiveChildren() {
-        return ResponseEntity.ok(childService.findAllActiveChildren());
+    public ResponseEntity<?> findAllActiveChildren() {
+        try {
+            return ResponseEntity.ok(childService.findAllActiveChildren());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/child/{childId}")
-    public ResponseEntity<ChildDto> findChildById(@PathVariable Integer childId) {
-        return ResponseEntity.ok(childService.findChildById(childId));
+    public ResponseEntity<?> findChildById(@PathVariable Integer childId) {
+        try {
+            return ResponseEntity.ok(childService.findChildById(childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/child/{childId}/edit")
@@ -54,18 +69,34 @@ public class ChildController {
     }
 
     @PutMapping("/child/{childId}/activate")
-    public ResponseEntity<ChildDto> activateChildren(@PathVariable Integer childId) {
-        return ResponseEntity.ok(childService.activateChildren(childId));
+    public ResponseEntity<?> activateChildren(@PathVariable Integer childId) {
+        try {
+            return ResponseEntity.ok(childService.activateChildren(childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/child/{childId}/deactivate")
-    public ResponseEntity<ChildDto> deactivateChildren(@PathVariable Integer childId) {
-        return ResponseEntity.ok(childService.deactivateChildren(childId));
+    public ResponseEntity<?> deactivateChildren(@PathVariable Integer childId) {
+        try {
+            return ResponseEntity.ok(childService.deactivateChildren(childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/child/{childId}/verify-email")
-    public ResponseEntity<ChildDto> verifyEmailAddress(@PathVariable Integer childId) {
-        return ResponseEntity.ok(childService.verifyEmailAddress(childId));
+    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer childId) {
+        try {
+            return ResponseEntity.ok(childService.verifyEmailAddress(childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+
+        }
     }
 
     @DeleteMapping("/child/{childId}/delete")

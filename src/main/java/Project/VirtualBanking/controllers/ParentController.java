@@ -1,14 +1,10 @@
 package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.ParentDto;
-import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
-import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
 import Project.VirtualBanking.services.ParentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @RestController
 public class ParentController {
@@ -30,18 +26,33 @@ public class ParentController {
     }
 
     @GetMapping("/parents")
-    public ResponseEntity<List<ParentDto>> findAllParents() {
-        return ResponseEntity.ok(parentService.findAllParents());
+    public ResponseEntity<?> findAllParents() {
+        try {
+            return ResponseEntity.ok(parentService.findAllParents());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parents/active")
-    public ResponseEntity<List<ParentDto>> findAllActiveParents() {
-        return ResponseEntity.ok(parentService.findAllActiveParents());
+    public ResponseEntity<?> findAllActiveParents() {
+        try {
+            return ResponseEntity.ok(parentService.findAllActiveParents());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parent/{parentId}")
-    public ResponseEntity<ParentDto> findParentById(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(parentService.findParentById(parentId));
+    public ResponseEntity<?> findParentById(@PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.findParentById(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/parent/{parentId}/edit")
@@ -55,18 +66,33 @@ public class ParentController {
     }
 
     @PutMapping("/parent/{parentId}/activate")
-    public ResponseEntity<ParentDto> activateParent(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(parentService.activateParent(parentId));
+    public ResponseEntity<?> activateParent(@PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.activateParent(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/parent/{parentId}/deactivate")
-    public ResponseEntity<ParentDto> deactivateParent(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(parentService.deactivateParent(parentId));
+    public ResponseEntity<?> deactivateParent(@PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.deactivateParent(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/parent/{parentId}/verify-email")
-    public ResponseEntity<ParentDto> verifyEmailAddress(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(parentService.verifyEmailAddress(parentId));
+    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.verifyEmailAddress(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @DeleteMapping("/parent/{parentId}/delete")
@@ -80,25 +106,45 @@ public class ParentController {
      */
 
     @GetMapping("/parents-with-children")
-    public ResponseEntity<List<ParentWithChildrenDto>> findAllParentsWithChildren() {
-        return ResponseEntity.ok(parentService.findAllParentsWithChildren());
+    public ResponseEntity<?> findAllParentsWithChildren() {
+        try {
+            return ResponseEntity.ok(parentService.findAllParentsWithChildren());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parents-with-children/active")
-    public ResponseEntity<List<ParentWithChildrenDto>> findAllActiveParentsWithActiveChildren() {
-        return ResponseEntity.ok(parentService.findAllActiveParentsWithActiveChildren());
+    public ResponseEntity<?> findAllActiveParentsWithActiveChildren() {
+        try {
+            return ResponseEntity.ok(parentService.findAllActiveParentsWithActiveChildren());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parent/{parentId}/children")
-    public ResponseEntity<ParentWithChildrenDto> findParentWithChildrenByParentId(@PathVariable Integer parentId) {
-        return ResponseEntity.ok(parentService.findParentWithChildrenByParentId(parentId));
+    public ResponseEntity<?> findParentWithChildrenByParentId(@PathVariable Integer parentId) {
+        try {
+            return ResponseEntity.ok(parentService.findParentWithChildrenByParentId(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parent/{parentId}/children/active")
-    public ResponseEntity<ParentWithChildrenDto> findParentWithActiveChildrenByParentId(
+    public ResponseEntity<?> findParentWithActiveChildrenByParentId(
             @PathVariable Integer parentId
     ) {
-        return ResponseEntity.ok(parentService.findParentWithActiveChildrenByParentId(parentId));
+        try {
+            return ResponseEntity.ok(parentService.findParentWithActiveChildrenByParentId(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     /**
@@ -106,26 +152,46 @@ public class ParentController {
      */
 
     @GetMapping("/parents-with-payment-methods")
-    public ResponseEntity<List<ParentWithPaymentMethodsDto>> findAllParentsWithPaymentMethods() {
-        return ResponseEntity.ok(parentService.findAllParentsWithPaymentMethods());
+    public ResponseEntity<?> findAllParentsWithPaymentMethods() {
+        try {
+            return ResponseEntity.ok(parentService.findAllParentsWithPaymentMethods());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parents-with-payment-methods/active")
-    public ResponseEntity<List<ParentWithPaymentMethodsDto>> findAllActiveParentsWithActivePaymentMethods() {
-        return ResponseEntity.ok(parentService.findAllActiveParentsWithActivePaymentMethods());
+    public ResponseEntity<?> findAllActiveParentsWithActivePaymentMethods() {
+        try {
+            return ResponseEntity.ok(parentService.findAllActiveParentsWithActivePaymentMethods());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parent/{parentId}/payment-methods")
-    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithPaymentMethodsByParentId(
+    public ResponseEntity<?> findParentWithPaymentMethodsByParentId(
             @PathVariable Integer parentId
     ) {
-        return ResponseEntity.ok(parentService.findParentWithPaymentMethodsByParentId(parentId));
+        try {
+            return ResponseEntity.ok(parentService.findParentWithPaymentMethodsByParentId(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/parent/{parentId}/payment-methods/active")
-    public ResponseEntity<ParentWithPaymentMethodsDto> findParentWithActivePaymentMethodsByParentId(
+    public ResponseEntity<?> findParentWithActivePaymentMethodsByParentId(
             @PathVariable Integer parentId
     ) {
-        return ResponseEntity.ok(parentService.findParentWithActivePaymentMethodsByParentId(parentId));
+        try {
+            return ResponseEntity.ok(parentService.findParentWithActivePaymentMethodsByParentId(parentId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 }

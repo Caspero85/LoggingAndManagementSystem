@@ -1,5 +1,6 @@
 package Project.VirtualBanking.services;
 
+import Project.VirtualBanking.OtherMethods.EntityValidationCheck.ParentValidationCheck;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
 import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
@@ -8,11 +9,8 @@ import Project.VirtualBanking.models.entities.Parent;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,20 +26,8 @@ public class ParentService {
 
     public ParentDto saveParent(ParentDto parentDto){
         List<Parent> parents = parentRepository.findAll();
-        for (Parent parent : parents) {
-            if (parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany adres e-mail jest już w użyciu");
-            }
-            if (parent.getPhoneNumber().equals(parentDto.getPhoneNumber())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany numer telefonu jest już w użyciu");
-            }
-        }
 
-        LocalDate today = LocalDate.now();
-        LocalDate eighteenYearsAgo = today.minusYears(18);
-        if (parentDto.getDateOfBirth().isAfter(eighteenYearsAgo)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic musi mieć ukończone 18 lat");
-        }
+        ParentValidationCheck.saveParentValidationCheck(parentDto, parents);
 
         return ParentDto.fromEntity(parentRepository.save(Parent.fromDto(
                 parentDto,
@@ -65,9 +51,9 @@ public class ParentService {
 
     public ParentDto editParent(ParentDto parentDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
-        if(!parent.isActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
-        }
+        List<Parent> parents = parentRepository.findAll();
+
+        ParentValidationCheck.editParentValidationCheck(parentDto, parents, parent);
 
         if (!parent.getEmailAddress().equals(parentDto.getEmailAddress())) {
             parent.setEmailAddressVerified(false);

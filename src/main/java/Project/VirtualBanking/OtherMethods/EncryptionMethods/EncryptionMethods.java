@@ -1,4 +1,4 @@
-package Project.VirtualBanking.Encryption;
+package Project.VirtualBanking.OtherMethods.EncryptionMethods;
 
 public class EncryptionMethods {
 

@@ -1,5 +1,6 @@
 package Project.VirtualBanking.services;
 
+import Project.VirtualBanking.OtherMethods.EntityValidationCheck.PaymentMethodValidationCheck;
 import Project.VirtualBanking.models.dtos.PaymentMethodDto;
 import Project.VirtualBanking.models.entities.EncryptionKey;
 import Project.VirtualBanking.models.entities.Parent;
@@ -7,7 +8,6 @@ import Project.VirtualBanking.models.entities.PaymentMethod;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import Project.VirtualBanking.repositories.PaymentMethodRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,15 +31,8 @@ public class PaymentMethodService {
 
     public PaymentMethodDto savePaymentMethod(PaymentMethodDto paymentMethodDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
-        if (!parent.isEmailAddressVerified()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adres e-mail rodzica nie został zweryfikowany");
-        }
-        if (!parent.isActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
-        }
-        if (parent.getPaymentMethods().stream().anyMatch(paymentMethod -> paymentMethod.isActive())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic ma już aktywną metodę płatności");
-        }
+
+        PaymentMethodValidationCheck.saveCreditCardValidationCheck(paymentMethodDto, parent);
 
         parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
 

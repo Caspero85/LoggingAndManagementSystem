@@ -9,9 +9,8 @@ public class PaymentMethodDto {
     private Integer paymentInfoID;
     private String cardNumber;
     private String cardHolderName;
-    private String cardHolderUsername;
-    private String expirationDate;
-    private String cvv;
+    private String cardExpirationDate;
+    private String cardCvv;
     private LocalDate paymentMethodAddedDate;
     private boolean active;
     private String details;
@@ -20,14 +19,13 @@ public class PaymentMethodDto {
     }
 
     public PaymentMethodDto(Integer paymentInfoID, String cardNumber, String cardHolderName,
-                            String cardHolderUsername, String expirationDate, String cvv,
-                            LocalDate paymentMethodAddedDate, boolean active, String details) {
+                            String cardExpirationDate, String cardCvv, LocalDate paymentMethodAddedDate,
+                            boolean active, String details) {
         this.paymentInfoID = paymentInfoID;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
-        this.cardHolderUsername = cardHolderUsername;
-        this.expirationDate = expirationDate;
-        this.cvv = cvv;
+        this.cardExpirationDate = cardExpirationDate;
+        this.cardCvv = cardCvv;
         this.paymentMethodAddedDate = paymentMethodAddedDate;
         this.active = active;
         this.details = details;
@@ -54,25 +52,18 @@ public class PaymentMethodDto {
         this.cardHolderName = cardHolderName;
     }
 
-    public String getCardHolderUsername() {
-        return cardHolderUsername;
+    public String getCardExpirationDate() {
+        return cardExpirationDate;
     }
-    public void setCardHolderUsername(String cardHolderUsername) {
-        this.cardHolderUsername = cardHolderUsername;
-    }
-
-    public String getExpirationDate() {
-        return expirationDate;
-    }
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setCardExpirationDate(String cardExpirationDate) {
+        this.cardExpirationDate = cardExpirationDate;
     }
 
-    public String getCvv() {
-        return cvv;
+    public String getCardCvv() {
+        return cardCvv;
     }
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setCardCvv(String cardCvv) {
+        this.cardCvv = cardCvv;
     }
 
     public LocalDate getPaymentMethodAddedDate() {
@@ -101,9 +92,8 @@ public class PaymentMethodDto {
                 paymentMethod.getPaymentInfoID(),
                 paymentMethod.getCardNumber(),
                 paymentMethod.getCardHolderName(),
-                paymentMethod.getCardHolderUsername(),
-                paymentMethod.getExpirationDate(),
-                paymentMethod.getCvv(),
+                paymentMethod.getCardExpirationDate(),
+                paymentMethod.getCardCvv(),
                 paymentMethod.getPaymentMethodAddedDate(),
                 paymentMethod.isActive(),
                 paymentMethod.getDetails()

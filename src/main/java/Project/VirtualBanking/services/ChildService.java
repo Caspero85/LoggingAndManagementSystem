@@ -1,5 +1,5 @@
 package Project.VirtualBanking.services;
-
+import Project.VirtualBanking.OtherMethods.EntityValidationCheck.ChildValidationCheck;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.entities.Child;
 import Project.VirtualBanking.models.entities.EncryptionKey;
@@ -30,24 +30,9 @@ public class ChildService {
 
     public ChildDto saveChild(ChildDto childDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
-        if (!parent.isEmailAddressVerified()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adres e-mail rodzica nie został zweryfikowany");
-        }
-        if (!parent.isActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
-        }
-
         List<Child> children = childRepository.findAll();
-        for (Child child : children) {
-            if (child.getEmailAddress().equals(childDto.getEmailAddress())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany adres e-mail jest już w użyciu");
-            }
-        }
-        for (Child child : children) {
-            if (child.getUsername().equals(childDto.getUsername())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podana nazwa użytkownika jest już w użyciu");
-            }
-        }
+
+        ChildValidationCheck.saveChildValidationCheck(childDto, children, parent);
 
         return ChildDto.fromEntity(childRepository.save(Child.fromDto(
                 childDto,
@@ -71,9 +56,10 @@ public class ChildService {
 
     public ChildDto editChildren(ChildDto childDto, Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
-        if (!child.isActive()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto dziecka jest nieaktywne");
-        }
+        List <Child> children = childRepository.findAll();
+        Parent parent = child.getParent();
+
+        ChildValidationCheck.editChildValidationCheck(childDto, children, child, parent);
 
         if (!child.getEmailAddress().equals(childDto.getEmailAddress())) {
             child.setEmailAddressVerified(false);
@@ -93,15 +79,15 @@ public class ChildService {
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
-    public ChildDto verifyEmailAddress(Integer childId) {
-        Child child = childRepository.findById(childId).orElseThrow();
-        child.setEmailAddressVerified(true);
-        return ChildDto.fromEntity(childRepository.save(child));
-    }
-
     public ChildDto deactivateChildren(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(false);
+        return ChildDto.fromEntity(childRepository.save(child));
+    }
+
+    public ChildDto verifyEmailAddress(Integer childId) {
+        Child child = childRepository.findById(childId).orElseThrow();
+        child.setEmailAddressVerified(true);
         return ChildDto.fromEntity(childRepository.save(child));
     }
 

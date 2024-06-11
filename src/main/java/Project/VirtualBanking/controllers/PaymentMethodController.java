@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @RestController
 public class PaymentMethodController {
 
@@ -31,28 +29,53 @@ public class PaymentMethodController {
     }
 
     @GetMapping("/payment-methods")
-    public ResponseEntity<List<PaymentMethodDto>> findAllPaymentMethods() {
-        return ResponseEntity.ok(paymentMethodService.findAllPaymentMethods());
+    public ResponseEntity<?> findAllPaymentMethods() {
+        try {
+            return ResponseEntity.ok(paymentMethodService.findAllPaymentMethods());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/payment-methods/active")
-    public ResponseEntity<List<PaymentMethodDto>> findAllActivePaymentMethods() {
-        return ResponseEntity.ok(paymentMethodService.findAllActivePaymentMethods());
+    public ResponseEntity<?> findAllActivePaymentMethods() {
+        try {
+            return ResponseEntity.ok(paymentMethodService.findAllActivePaymentMethods());
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @GetMapping("/payment-method/{paymentMethodId}")
-    public ResponseEntity<PaymentMethodDto> findPaymentMethodById(@PathVariable Integer paymentMethodId) {
-        return ResponseEntity.ok(paymentMethodService.findPaymentMethodById(paymentMethodId));
+    public ResponseEntity<?> findPaymentMethodById(@PathVariable Integer paymentMethodId) {
+        try {
+            return ResponseEntity.ok(paymentMethodService.findPaymentMethodById(paymentMethodId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/activate")
-    public ResponseEntity<PaymentMethodDto> activatePaymentMethod(@PathVariable Integer paymentMethodId) {
-        return ResponseEntity.ok(paymentMethodService.activatePaymentMethod(paymentMethodId));
+    public ResponseEntity<?> activatePaymentMethod(@PathVariable Integer paymentMethodId) {
+        try {
+            return ResponseEntity.ok(paymentMethodService.activatePaymentMethod(paymentMethodId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @PutMapping("/payment-method/{paymentMethodId}/deactivate")
-    public ResponseEntity<PaymentMethodDto> deactivatePaymentMethod(@PathVariable Integer paymentMethodId) {
-        return ResponseEntity.ok(paymentMethodService.deactivatePaymentMethod(paymentMethodId));
+    public ResponseEntity<?> deactivatePaymentMethod(@PathVariable Integer paymentMethodId) {
+        try {
+            return ResponseEntity.ok(paymentMethodService.deactivatePaymentMethod(paymentMethodId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     @DeleteMapping("/payment-method/{paymentMethodId}/delete")

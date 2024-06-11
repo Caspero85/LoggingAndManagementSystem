@@ -1,7 +1,7 @@
 package Project.VirtualBanking.models.entities;
 
 
-import Project.VirtualBanking.Encryption.EncryptionMethods;
+import Project.VirtualBanking.OtherMethods.EncryptionMethods.EncryptionMethods;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import jakarta.persistence.*;
 
