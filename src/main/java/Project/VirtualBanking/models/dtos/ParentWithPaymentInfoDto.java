@@ -5,15 +5,15 @@ import Project.VirtualBanking.models.entities.Parent;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ParentWithPaymentMethodsDto {
+public class ParentWithPaymentInfoDto {
 
     private ParentDto parentDto;
-    private List<PaymentMethodDto> paymentMethodsDto;
+    private List<PaymentInfoDto> paymentMethodsDto;
 
-    public ParentWithPaymentMethodsDto() {
+    public ParentWithPaymentInfoDto() {
     }
 
-    public ParentWithPaymentMethodsDto(ParentDto parentDto, List<PaymentMethodDto> paymentMethodsDto) {
+    public ParentWithPaymentInfoDto(ParentDto parentDto, List<PaymentInfoDto> paymentMethodsDto) {
         this.parentDto = parentDto;
         this.paymentMethodsDto = paymentMethodsDto;
     }
@@ -25,17 +25,17 @@ public class ParentWithPaymentMethodsDto {
         this.parentDto = parentDto;
     }
 
-    public List<PaymentMethodDto> getPaymentMethodsDto() {
+    public List<PaymentInfoDto> getPaymentMethodsDto() {
         return paymentMethodsDto;
     }
-    public void setPaymentMethodsDto(List<PaymentMethodDto> paymentMethodsDto) {
+    public void setPaymentMethodsDto(List<PaymentInfoDto> paymentMethodsDto) {
         this.paymentMethodsDto = paymentMethodsDto;
     }
 
-    public static ParentWithPaymentMethodsDto fromEntity(Parent parent){
-        return new ParentWithPaymentMethodsDto(
+    public static ParentWithPaymentInfoDto fromEntity(Parent parent){
+        return new ParentWithPaymentInfoDto(
                 ParentDto.fromEntity(parent),
-                parent.getPaymentMethods().stream().map(paymentMethod -> PaymentMethodDto.fromEntity(paymentMethod))
+                parent.getPaymentMethods().stream().map(paymentMethod -> PaymentInfoDto.fromEntity(paymentMethod))
                         .collect(Collectors.toList())
         );
     }

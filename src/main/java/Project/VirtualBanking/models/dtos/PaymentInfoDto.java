@@ -1,10 +1,10 @@
 package Project.VirtualBanking.models.dtos;
 
-import Project.VirtualBanking.models.entities.PaymentMethod;
+import Project.VirtualBanking.models.entities.PaymentInfo;
 
 import java.time.LocalDate;
 
-public class PaymentMethodDto {
+public class PaymentInfoDto {
 
     private Integer paymentInfoID;
     private String cardNumber;
@@ -15,12 +15,12 @@ public class PaymentMethodDto {
     private boolean active;
     private String details;
 
-    public PaymentMethodDto() {
+    public PaymentInfoDto() {
     }
 
-    public PaymentMethodDto(Integer paymentInfoID, String cardNumber, String cardHolderName,
-                            String cardExpirationDate, String cardCvv, LocalDate paymentMethodAddedDate,
-                            boolean active, String details) {
+    public PaymentInfoDto(Integer paymentInfoID, String cardNumber, String cardHolderName,
+                          String cardExpirationDate, String cardCvv, LocalDate paymentMethodAddedDate,
+                          boolean active, String details) {
         this.paymentInfoID = paymentInfoID;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
@@ -87,16 +87,16 @@ public class PaymentMethodDto {
         this.details = details;
     }
 
-    public static PaymentMethodDto fromEntity(PaymentMethod paymentMethod) {
-        return new PaymentMethodDto(
-                paymentMethod.getPaymentInfoID(),
-                paymentMethod.getCardNumber(),
-                paymentMethod.getCardHolderName(),
-                paymentMethod.getCardExpirationDate(),
-                paymentMethod.getCardCvv(),
-                paymentMethod.getPaymentMethodAddedDate(),
-                paymentMethod.isActive(),
-                paymentMethod.getDetails()
+    public static PaymentInfoDto fromEntity(PaymentInfo paymentInfo) {
+        return new PaymentInfoDto(
+                paymentInfo.getPaymentInfoID(),
+                paymentInfo.getCardNumber(),
+                paymentInfo.getCardHolderName(),
+                paymentInfo.getCardExpirationDate(),
+                paymentInfo.getCardCvv(),
+                paymentInfo.getPaymentMethodAddedDate(),
+                paymentInfo.isActive(),
+                paymentInfo.getDetails()
         );
     }
 }

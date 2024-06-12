@@ -1,13 +1,13 @@
 package Project.VirtualBanking.models.entities;
 
 import Project.VirtualBanking.OtherMethods.EncryptionMethods.EncryptionMethods;
-import Project.VirtualBanking.models.dtos.PaymentMethodDto;
+import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
-public class PaymentMethod {
+public class PaymentInfo {
 
     @Id
     @GeneratedValue
@@ -39,11 +39,11 @@ public class PaymentMethod {
     @JoinColumn(name = "keyID", referencedColumnName = "keyID")
     private EncryptionKey encryptionKey;
 
-    public PaymentMethod() {
+    public PaymentInfo() {
     }
 
-    public PaymentMethod(Parent parent, String cardNumber, String cardHolderName, String cardExpirationDate,
-                         String cardCvv, String details, EncryptionKey encryptionKey) {
+    public PaymentInfo(Parent parent, String cardNumber, String cardHolderName, String cardExpirationDate,
+                       String cardCvv, String details, EncryptionKey encryptionKey) {
         this.parent = parent;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
@@ -125,24 +125,24 @@ public class PaymentMethod {
         this.encryptionKey = encryptionKey;
     }
 
-    public static void encryptPaymentMethod(PaymentMethod paymentMethod, PaymentMethodDto paymentMethodDto) {
-        paymentMethod.setCardNumber(paymentMethodDto.getCardNumber());
-        paymentMethod.setCardHolderName(paymentMethodDto.getCardHolderName());
-        paymentMethod.setCardExpirationDate(paymentMethodDto.getCardExpirationDate());
-        paymentMethod.setCardCvv(paymentMethodDto.getCardCvv());
+    public static void encryptPaymentMethod(PaymentInfo paymentInfo, PaymentInfoDto paymentInfoDto) {
+        paymentInfo.setCardNumber(paymentInfoDto.getCardNumber());
+        paymentInfo.setCardHolderName(paymentInfoDto.getCardHolderName());
+        paymentInfo.setCardExpirationDate(paymentInfoDto.getCardExpirationDate());
+        paymentInfo.setCardCvv(paymentInfoDto.getCardCvv());
     }
 
-    public static PaymentMethod fromDto(PaymentMethodDto paymentMethodDto, Parent parent, EncryptionKey encryptionKey) {
-        PaymentMethod paymentMethod = new PaymentMethod(
+    public static PaymentInfo fromDto(PaymentInfoDto paymentInfoDto, Parent parent, EncryptionKey encryptionKey) {
+        PaymentInfo paymentInfo = new PaymentInfo(
                 parent,
-                paymentMethodDto.getCardNumber(),
-                paymentMethodDto.getCardHolderName(),
-                paymentMethodDto.getCardExpirationDate(),
-                paymentMethodDto.getCardCvv(),
-                paymentMethodDto.getDetails(),
+                paymentInfoDto.getCardNumber(),
+                paymentInfoDto.getCardHolderName(),
+                paymentInfoDto.getCardExpirationDate(),
+                paymentInfoDto.getCardCvv(),
+                paymentInfoDto.getDetails(),
                 encryptionKey
         );
-        encryptPaymentMethod(paymentMethod, paymentMethodDto);
-        return paymentMethod;
+        encryptPaymentMethod(paymentInfo, paymentInfoDto);
+        return paymentInfo;
     }
 }

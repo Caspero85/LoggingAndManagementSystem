@@ -3,7 +3,7 @@ package Project.VirtualBanking.services;
 import Project.VirtualBanking.OtherMethods.EntityValidationCheck.ParentValidationCheck;
 import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.ParentWithChildrenDto;
-import Project.VirtualBanking.models.dtos.ParentWithPaymentMethodsDto;
+import Project.VirtualBanking.models.dtos.ParentWithPaymentInfoDto;
 import Project.VirtualBanking.models.entities.EncryptionKey;
 import Project.VirtualBanking.models.entities.Parent;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
@@ -133,16 +133,16 @@ public class ParentService {
      * PaymentMethod related methods
      */
 
-    public List<ParentWithPaymentMethodsDto> findAllParentsWithPaymentMethods() {
+    public List<ParentWithPaymentInfoDto> findAllParentsWithPaymentMethods() {
         return parentRepository.findAll().stream()
-                .map(parent -> ParentWithPaymentMethodsDto.fromEntity(parent))
+                .map(parent -> ParentWithPaymentInfoDto.fromEntity(parent))
                 .collect(Collectors.toList());
     }
 
-    public List<ParentWithPaymentMethodsDto> findAllActiveParentsWithActivePaymentMethods() {
-        List<ParentWithPaymentMethodsDto> parentsWithPaymentMethodsDto = parentRepository.findAll().stream()
+    public List<ParentWithPaymentInfoDto> findAllActiveParentsWithActivePaymentMethods() {
+        List<ParentWithPaymentInfoDto> parentsWithPaymentMethodsDto = parentRepository.findAll().stream()
                 .filter(parent -> parent.isActive())
-                .map(parent -> ParentWithPaymentMethodsDto.fromEntity(parent))
+                .map(parent -> ParentWithPaymentInfoDto.fromEntity(parent))
                 .collect(Collectors.toList());
 
         parentsWithPaymentMethodsDto.forEach(
@@ -154,19 +154,19 @@ public class ParentService {
         return parentsWithPaymentMethodsDto;
     }
 
-    public ParentWithPaymentMethodsDto findParentWithPaymentMethodsByParentId(Integer parentId) {
-        return ParentWithPaymentMethodsDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
+    public ParentWithPaymentInfoDto findParentWithPaymentMethodsByParentId(Integer parentId) {
+        return ParentWithPaymentInfoDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
-    public ParentWithPaymentMethodsDto findParentWithActivePaymentMethodsByParentId(Integer parentId) {
-        ParentWithPaymentMethodsDto parentWithPaymentMethodsDto = ParentWithPaymentMethodsDto.fromEntity(
+    public ParentWithPaymentInfoDto findParentWithActivePaymentMethodsByParentId(Integer parentId) {
+        ParentWithPaymentInfoDto parentWithPaymentInfoDto = ParentWithPaymentInfoDto.fromEntity(
                 parentRepository.findById(parentId).orElseThrow()
         );
 
-        parentWithPaymentMethodsDto.setPaymentMethodsDto(
-                parentWithPaymentMethodsDto.getPaymentMethodsDto().stream()
+        parentWithPaymentInfoDto.setPaymentMethodsDto(
+                parentWithPaymentInfoDto.getPaymentMethodsDto().stream()
                         .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList())
         );
-        return parentWithPaymentMethodsDto;
+        return parentWithPaymentInfoDto;
     }
 }

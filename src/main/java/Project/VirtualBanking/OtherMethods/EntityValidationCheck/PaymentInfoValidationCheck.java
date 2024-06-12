@@ -4,14 +4,14 @@ import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardCvvValidat
 import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardExpirationDateValidationCheck;
 import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardHolderNameValidationCheck;
 import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardNumberValidationCheck;
-import Project.VirtualBanking.models.dtos.PaymentMethodDto;
+import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import Project.VirtualBanking.models.entities.Parent;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class PaymentMethodValidationCheck {
+public class PaymentInfoValidationCheck {
 
-    public static void saveCreditCardValidationCheck(PaymentMethodDto paymentMethodDto, Parent parent) {
+    public static void saveCreditCardValidationCheck(PaymentInfoDto paymentInfoDto, Parent parent) {
         if (!parent.isActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
         }
@@ -22,9 +22,9 @@ public class PaymentMethodValidationCheck {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic ma już aktywną metodę płatności");
         }
 
-        CardNumberValidationCheck.cardNumberValidationCheck(paymentMethodDto.getCardNumber());
-        CardHolderNameValidationCheck.cardHolderNameValidationCheck(paymentMethodDto.getCardHolderName());
-        CardExpirationDateValidationCheck.cardExpirationDateValidationCheck(paymentMethodDto.getCardExpirationDate());
-        CardCvvValidationCheck.cardCvvValidationCheck(paymentMethodDto.getCardCvv());
+        CardNumberValidationCheck.cardNumberValidationCheck(paymentInfoDto.getCardNumber());
+        CardHolderNameValidationCheck.cardHolderNameValidationCheck(paymentInfoDto.getCardHolderName());
+        CardExpirationDateValidationCheck.cardExpirationDateValidationCheck(paymentInfoDto.getCardExpirationDate());
+        CardCvvValidationCheck.cardCvvValidationCheck(paymentInfoDto.getCardCvv());
     }
 }

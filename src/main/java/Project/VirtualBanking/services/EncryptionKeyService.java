@@ -20,4 +20,8 @@ public class EncryptionKeyService {
         return encryptionKeyRepository.findAll().stream()
                 .map(encryptionKey -> EncryptionKeyDto.fromEntity(encryptionKey)).collect(Collectors.toList());
     }
+
+    public EncryptionKeyDto findEncryptionKeyById(Integer encryptionKeyId) {
+        return EncryptionKeyDto.fromEntity(encryptionKeyRepository.findById(encryptionKeyId).orElseThrow());
+    }
 }
