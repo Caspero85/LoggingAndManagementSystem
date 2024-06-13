@@ -6,22 +6,24 @@ import java.time.LocalDate;
 
 public class PaymentInfoDto {
 
-    private Integer paymentInfoID;
+    private Integer paymentInfoId;
+    private Integer parentId;
     private String cardNumber;
     private String cardHolderName;
     private String cardExpirationDate;
     private String cardCvv;
     private LocalDate paymentMethodAddedDate;
-    private boolean active;
+    private Boolean active;
     private String details;
 
     public PaymentInfoDto() {
     }
 
-    public PaymentInfoDto(Integer paymentInfoID, String cardNumber, String cardHolderName,
+    public PaymentInfoDto(Integer paymentInfoId, Integer parentId, String cardNumber, String cardHolderName,
                           String cardExpirationDate, String cardCvv, LocalDate paymentMethodAddedDate,
-                          boolean active, String details) {
-        this.paymentInfoID = paymentInfoID;
+                          Boolean active, String details) {
+        this.paymentInfoId = paymentInfoId;
+        this.parentId = parentId;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.cardExpirationDate = cardExpirationDate;
@@ -31,11 +33,18 @@ public class PaymentInfoDto {
         this.details = details;
     }
 
-    public Integer getPaymentInfoID() {
-        return paymentInfoID;
+    public Integer getPaymentInfoId() {
+        return paymentInfoId;
     }
-    public void setPaymentInfoID(Integer paymentInfoID) {
-        this.paymentInfoID = paymentInfoID;
+    public void setPaymentInfoId(Integer paymentInfoId) {
+        this.paymentInfoId = paymentInfoId;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getCardNumber() {
@@ -73,10 +82,10 @@ public class PaymentInfoDto {
         this.paymentMethodAddedDate = paymentMethodAddedDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -89,7 +98,8 @@ public class PaymentInfoDto {
 
     public static PaymentInfoDto fromEntity(PaymentInfo paymentInfo) {
         return new PaymentInfoDto(
-                paymentInfo.getPaymentInfoID(),
+                paymentInfo.getPaymentInfoId(),
+                paymentInfo.getParent().getParentId(),
                 paymentInfo.getCardNumber(),
                 paymentInfo.getCardHolderName(),
                 paymentInfo.getCardExpirationDate(),

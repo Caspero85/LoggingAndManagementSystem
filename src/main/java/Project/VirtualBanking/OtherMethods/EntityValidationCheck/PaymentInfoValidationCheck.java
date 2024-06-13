@@ -6,12 +6,17 @@ import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardHolderName
 import Project.VirtualBanking.OtherMethods.ValidationCheckMethods.CardNumberValidationCheck;
 import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import Project.VirtualBanking.models.entities.Parent;
+import Project.VirtualBanking.models.entities.PaymentInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 public class PaymentInfoValidationCheck {
 
-    public static void saveCreditCardValidationCheck(PaymentInfoDto paymentInfoDto, Parent parent) {
+    public static void saveCreditCardValidationCheck(
+            PaymentInfoDto paymentInfoDto, Parent parent, List<PaymentInfo> paymentsInfo
+    ) {
         if (!parent.isActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
         }
@@ -20,6 +25,15 @@ public class PaymentInfoValidationCheck {
         }
         if (parent.getPaymentMethods().stream().anyMatch(paymentMethod -> paymentMethod.isActive())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic ma już aktywną metodę płatności");
+        }
+
+        for(PaymentInfo paymentInfo : paymentsInfo) {
+            if(paymentInfo.getCardNumber().equals(paymentInfoDto.getCardNumber())) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Karta kredytowa o podanym numerze jest już zarejestrowana w systemie"
+                );
+            }
         }
 
         CardNumberValidationCheck.cardNumberValidationCheck(paymentInfoDto.getCardNumber());

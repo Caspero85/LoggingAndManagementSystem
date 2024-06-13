@@ -11,7 +11,7 @@ public class PaymentInfo {
 
     @Id
     @GeneratedValue
-    private Integer paymentInfoID;
+    private Integer paymentInfoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentID", referencedColumnName = "parentID")
@@ -31,12 +31,12 @@ public class PaymentInfo {
 
     private LocalDate paymentMethodAddedDate;
 
-    private boolean active;
+    private Boolean active;
 
     private String details;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "keyID", referencedColumnName = "keyID")
+    @JoinColumn(name = "keyId", referencedColumnName = "keyId")
     private EncryptionKey encryptionKey;
 
     public PaymentInfo() {
@@ -55,11 +55,11 @@ public class PaymentInfo {
         this.encryptionKey = encryptionKey;
     }
 
-    public Integer getPaymentInfoID() {
-        return paymentInfoID;
+    public Integer getPaymentInfoId() {
+        return paymentInfoId;
     }
-    public void setPaymentInfoID(Integer paymentInfoID) {
-        this.paymentInfoID = paymentInfoID;
+    public void setPaymentInfoId(Integer paymentInfoId) {
+        this.paymentInfoId = paymentInfoId;
     }
 
     public Parent getParent() {
@@ -104,10 +104,10 @@ public class PaymentInfo {
         this.paymentMethodAddedDate = paymentMethodAddedDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

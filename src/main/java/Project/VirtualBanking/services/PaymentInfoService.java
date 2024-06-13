@@ -29,8 +29,9 @@ public class PaymentInfoService {
 
     public PaymentInfoDto savePaymentMethod(PaymentInfoDto paymentInfoDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
+        List<PaymentInfo> paymentsInfo = paymentInfoRepository.findAll();
 
-        PaymentInfoValidationCheck.saveCreditCardValidationCheck(paymentInfoDto, parent);
+        PaymentInfoValidationCheck.saveCreditCardValidationCheck(paymentInfoDto, parent, paymentsInfo);
 
         parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
 

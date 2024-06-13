@@ -9,7 +9,7 @@ public class EncryptionKey {
 
     @Id
     @GeneratedValue
-    private Integer keyID;
+    private Integer keyId;
 
     private String encryptionKey;
 
@@ -23,8 +23,8 @@ public class EncryptionKey {
         this.encryptionKey = generateRandomKey();
     }
 
-    public Integer getKeyID() {
-        return keyID;
+    public Integer getKeyId() {
+        return keyId;
     }
     public void setKeyId() {
         this.encryptionKey = generateRandomKey();

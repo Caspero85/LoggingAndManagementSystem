@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ChildDto {
 
     private Integer childId;
+    private Integer parentId;
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
@@ -16,16 +17,17 @@ public class ChildDto {
     private String username;
     private String password;
     private LocalDateTime accountCreationDate;
-    private boolean active;
+    private Boolean active;
     private String details;
 
     public ChildDto() {
     }
 
-    public ChildDto(Integer childId, String name, String surname, LocalDate dateOfBirth, String emailAddress,
-                    Boolean emailAddressVerified, String username, String password, LocalDateTime accountCreationDate,
-                    boolean active, String details) {
+    public ChildDto(Integer childId, Integer parentId, String name, String surname, LocalDate dateOfBirth,
+                    String emailAddress, Boolean emailAddressVerified, String username, String password,
+                    LocalDateTime accountCreationDate, Boolean active, String details) {
         this.childId = childId;
+        this.parentId = parentId;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -50,6 +52,13 @@ public class ChildDto {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getSurname() {
@@ -101,10 +110,10 @@ public class ChildDto {
         this.accountCreationDate = accountCreationDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -118,6 +127,7 @@ public class ChildDto {
     public static ChildDto fromEntity(Child child){
         return new ChildDto(
                 child.getChildId(),
+                child.getParent().getParentId(),
                 child.getName(),
                 child.getSurname(),
                 child.getDateOfBirth(),

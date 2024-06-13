@@ -68,7 +68,7 @@ public class ChildService {
         BeanUtils.copyProperties(
                 childDto,
                 child,
-                "childId", "emailAddressVerified", "accountCreationDate", "active"
+                "childId", "parentId", "emailAddressVerified", "accountCreationDate", "active"
         );
         return ChildDto.fromEntity(childRepository.save(child));
     }

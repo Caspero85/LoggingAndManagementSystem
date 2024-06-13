@@ -35,7 +35,21 @@ public class SubscriptionTypeValidationCheck {
             SubscriptionTypeDto subscriptionTypeDto,
             List<SubscriptionType> subscriptionTypes
     ) {
-        saveSubscriptionTypeValidationCheck(subscriptionTypeDto, subscriptionTypes);
+        for (SubscriptionType subscriptionTypeToCheck : subscriptionTypes) {
+            if (!subscriptionTypeToCheck.getSubscriptionTypeId().equals(subscriptionTypeDto.getSubscriptionTypeId())
+                    && subscriptionTypeToCheck.isActive()
+                    && subscriptionTypeToCheck.getTypeOfEducation().equals(subscriptionTypeDto.getTypeOfEducation())
+                    && subscriptionTypeToCheck.getHowManyMonths().equals(subscriptionTypeDto.getHowManyMonths())
+            ) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Nie można edytować subskrypcji ponieważ istnieje już aktywna subskrypcja o podanym typie edukacji i długości trwania"
+                );
+            }
+        }
+
+        TypeOfEducationValidationCheck.typeOfEducationValidationCheck(subscriptionTypeDto.getTypeOfEducation());
+        HowManyMonthsValidationCheck.howManyMonthsValidationCheck(subscriptionTypeDto.getHowManyMonths());
     }
 
     public static void activateSubscriptionTypeValidationCheck(

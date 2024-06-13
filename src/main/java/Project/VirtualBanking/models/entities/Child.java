@@ -41,12 +41,12 @@ public class Child {
 
     private LocalDateTime accountCreationDate;
 
-    private boolean active;
+    private Boolean active;
 
     private String details;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "keyID", referencedColumnName = "keyID")
+    @JoinColumn(name = "keyId", referencedColumnName = "keyId")
     private EncryptionKey encryptionKey;
 
     public Child() {
@@ -139,11 +139,11 @@ public class Child {
         this.accountCreationDate = accountCreationDate;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

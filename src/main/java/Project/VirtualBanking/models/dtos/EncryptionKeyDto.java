@@ -4,22 +4,22 @@ import Project.VirtualBanking.models.entities.EncryptionKey;
 
 public class EncryptionKeyDto {
 
-    private Integer keyID;
+    private Integer keyId;
     private String encryptionKey;
 
     public EncryptionKeyDto() {
     }
 
-    public EncryptionKeyDto(Integer keyID, String encryptionKey) {
-        this.keyID = keyID;
+    public EncryptionKeyDto(Integer keyId, String encryptionKey) {
+        this.keyId = keyId;
         this.encryptionKey = encryptionKey;
     }
 
-    public Integer getKeyID() {
-        return keyID;
+    public Integer getKeyId() {
+        return keyId;
     }
-    public void setKeyID(Integer key) {
-        this.keyID = key;
+    public void setKeyId(Integer keyId) {
+        this.keyId = keyId;
     }
 
     public String getEncryptionKey() {
@@ -31,7 +31,7 @@ public class EncryptionKeyDto {
 
     public static EncryptionKeyDto fromEntity(EncryptionKey encryptionKey) {
         return new EncryptionKeyDto(
-            encryptionKey.getKeyID(),
+            encryptionKey.getKeyId(),
             encryptionKey.getEncryptionKey()
         );
         }

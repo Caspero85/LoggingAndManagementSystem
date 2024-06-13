@@ -42,7 +42,7 @@ public class Parent {
     private String details;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "keyID", referencedColumnName = "keyID")
+    @JoinColumn(name = "keyId", referencedColumnName = "keyId")
     private EncryptionKey encryptionKey;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

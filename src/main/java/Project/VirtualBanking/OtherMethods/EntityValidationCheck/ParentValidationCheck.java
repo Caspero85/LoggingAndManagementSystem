@@ -33,6 +33,22 @@ public class ParentValidationCheck {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konto rodzica jest nieaktywne");
         }
 
-        saveParentValidationCheck(parentDto, parents);
+        for (Parent parentToCheck : parents) {
+            if(!parentToCheck.getParentId().equals(parent.getParentId())) {
+                if (parentToCheck.getEmailAddress().equals(parentDto.getEmailAddress())) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany adres e-mail jest już zajęty");
+                }
+                if (parentToCheck.getPhoneNumber().equals(parentDto.getPhoneNumber())) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podany numer telefonu jest już zajęty");
+                }
+            }
+        }
+
+        NameAndSurnameValidationCheck.nameValidationCheck(parentDto.getName());
+        NameAndSurnameValidationCheck.surnameValidationCheck(parentDto.getSurname());
+        EmailAddressValidationCheck.emailAddressValidationCheck(parentDto.getEmailAddress());
+        PhoneNumberValidationCheck.phoneNumberValidationCheck(parentDto.getPhoneNumber());
+        PasswordValidationCheck.passwordValidationCheck(parentDto.getPassword());
+        DateOfBirthValidationCheck.dateOfBirthValidationCheck(parentDto.getDateOfBirth());
     }
 }
