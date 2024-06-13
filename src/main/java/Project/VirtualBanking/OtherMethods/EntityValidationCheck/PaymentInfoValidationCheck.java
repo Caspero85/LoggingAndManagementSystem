@@ -28,10 +28,10 @@ public class PaymentInfoValidationCheck {
         }
 
         for(PaymentInfo paymentInfo : paymentsInfo) {
-            if(paymentInfo.getCardNumber().equals(paymentInfoDto.getCardNumber())) {
+            if(paymentInfo.isActive() && paymentInfo.getCardNumber().equals(paymentInfoDto.getCardNumber())) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
-                        "Karta kredytowa o podanym numerze jest już zarejestrowana w systemie"
+                        "W systemie istnieje już aktywna metoda płatności z podanym numerem karty"
                 );
             }
         }

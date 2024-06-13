@@ -33,8 +33,16 @@ public class SubscriptionTypeValidationCheck {
 
     public static void editSubscriptionTypeValidationCheck(
             SubscriptionTypeDto subscriptionTypeDto,
-            List<SubscriptionType> subscriptionTypes
+            List<SubscriptionType> subscriptionTypes,
+            SubscriptionType subscriptionType
     ) {
+        if (!subscriptionType.isActive()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Nie można edytować subskrypcji ponieważ subskrypcja jest nieaktywna"
+            );
+        }
+
         for (SubscriptionType subscriptionTypeToCheck : subscriptionTypes) {
             if (!subscriptionTypeToCheck.getSubscriptionTypeId().equals(subscriptionTypeDto.getSubscriptionTypeId())
                     && subscriptionTypeToCheck.isActive()
@@ -50,21 +58,5 @@ public class SubscriptionTypeValidationCheck {
 
         TypeOfEducationValidationCheck.typeOfEducationValidationCheck(subscriptionTypeDto.getTypeOfEducation());
         HowManyMonthsValidationCheck.howManyMonthsValidationCheck(subscriptionTypeDto.getHowManyMonths());
-    }
-
-    public static void activateSubscriptionTypeValidationCheck(
-            SubscriptionTypeDto subscriptionTypeDto, List<SubscriptionType> subscriptionTypes
-    ) {
-        for (SubscriptionType subscriptionType : subscriptionTypes) {
-            if (subscriptionType.isActive()
-                    && subscriptionType.getTypeOfEducation().equals(subscriptionTypeDto.getTypeOfEducation())
-                    && subscriptionType.getHowManyMonths().equals(subscriptionTypeDto.getHowManyMonths())
-            ) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "Nie można aktywować subskrypcji ponieważ istnieje już aktywna subskrypcja o podanym typie edukacji i długości trwania"
-                );
-            }
-        }
     }
 }

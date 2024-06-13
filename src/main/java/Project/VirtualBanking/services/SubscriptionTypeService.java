@@ -50,7 +50,9 @@ public class SubscriptionTypeService {
         SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
         List<SubscriptionType> subscriptionTypes = subscriptionTypeRepository.findAll();
 
-        SubscriptionTypeValidationCheck.editSubscriptionTypeValidationCheck(subscriptionTypeDto, subscriptionTypes);
+        SubscriptionTypeValidationCheck.editSubscriptionTypeValidationCheck(
+                subscriptionTypeDto, subscriptionTypes, subscriptionType
+        );
 
         BeanUtils.copyProperties(
                 subscriptionTypeDto,
@@ -58,19 +60,6 @@ public class SubscriptionTypeService {
                 "subscriptionTypeId", "subscriptionTypeCreationDate", "active"
         );
 
-        return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.save(subscriptionType));
-    }
-
-    public SubscriptionTypeDto activateSubscriptionType(Integer subscriptionTypeId) {
-        SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
-        List<SubscriptionType> subscriptionTypes = subscriptionTypeRepository.findAll();
-
-        SubscriptionTypeValidationCheck.activateSubscriptionTypeValidationCheck(
-                SubscriptionTypeDto.fromEntity(subscriptionType),
-                subscriptionTypes
-        );
-
-        subscriptionType.setActive(true);
         return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.save(subscriptionType));
     }
 

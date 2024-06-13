@@ -65,10 +65,10 @@ public class ParentController {
         }
     }
 
-    @PutMapping("/parent/{parentId}/activate")
-    public ResponseEntity<?> activateParent(@PathVariable Integer parentId) {
+    @PutMapping("/parent/{parentId}/verify-email")
+    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer parentId) {
         try {
-            return ResponseEntity.ok(parentService.activateParent(parentId));
+            return ResponseEntity.ok(parentService.verifyEmailAddress(parentId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
@@ -79,16 +79,6 @@ public class ParentController {
     public ResponseEntity<?> deactivateParent(@PathVariable Integer parentId) {
         try {
             return ResponseEntity.ok(parentService.deactivateParent(parentId));
-        }
-        catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-        }
-    }
-
-    @PutMapping("/parent/{parentId}/verify-email")
-    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer parentId) {
-        try {
-            return ResponseEntity.ok(parentService.verifyEmailAddress(parentId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

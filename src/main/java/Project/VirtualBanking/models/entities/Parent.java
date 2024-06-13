@@ -46,11 +46,9 @@ public class Parent {
     private EncryptionKey encryptionKey;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @OrderBy("active DESC")
     private List<Child> children;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @OrderBy("active DESC")
     private List<PaymentInfo> paymentsInfo;
 
     public Parent() {

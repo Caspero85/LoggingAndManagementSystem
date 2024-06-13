@@ -68,16 +68,6 @@ public class SubscriptionTypeController {
         }
     }
 
-    @PutMapping("/subscription-type/{subscriptionTypeId}/activate")
-    public ResponseEntity<?> activateSubscriptionType(@PathVariable Integer subscriptionTypeId) {
-        try {
-            return ResponseEntity.ok(subscriptionTypeService.activateSubscriptionType(subscriptionTypeId));
-        }
-        catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-        }
-    }
-
     @PutMapping("/subscription-type/{subscriptionTypeId}/deactivate")
     public ResponseEntity<?> deactivateSubscriptionType(@PathVariable Integer subscriptionTypeId) {
         try {

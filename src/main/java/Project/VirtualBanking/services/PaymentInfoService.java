@@ -57,12 +57,6 @@ public class PaymentInfoService {
         return PaymentInfoDto.fromEntity(paymentInfoRepository.findById(paymentInfoId).orElseThrow());
     }
 
-    public PaymentInfoDto activatePaymentInfo(Integer paymentInfoId) {
-        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
-        paymentInfo.setActive(true);
-        return PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
-    }
-
     public PaymentInfoDto deactivatePaymentInfo(Integer paymentInfoId) {
         PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
         paymentInfo.setActive(false);

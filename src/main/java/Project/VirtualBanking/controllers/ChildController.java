@@ -68,13 +68,14 @@ public class ChildController {
         }
     }
 
-    @PutMapping("/child/{childId}/activate")
-    public ResponseEntity<?> activateChildren(@PathVariable Integer childId) {
+    @PutMapping("/child/{childId}/verify-email")
+    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer childId) {
         try {
-            return ResponseEntity.ok(childService.activateChildren(childId));
+            return ResponseEntity.ok(childService.verifyEmailAddress(childId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+
         }
     }
 
@@ -85,17 +86,6 @@ public class ChildController {
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-        }
-    }
-
-    @PutMapping("/child/{childId}/verify-email")
-    public ResponseEntity<?> verifyEmailAddress(@PathVariable Integer childId) {
-        try {
-            return ResponseEntity.ok(childService.verifyEmailAddress(childId));
-        }
-        catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-
         }
     }
 

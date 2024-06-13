@@ -9,9 +9,7 @@ import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.EncryptionKeyRepository;
 import Project.VirtualBanking.repositories.ParentRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +29,11 @@ public class ChildService {
 
     public ChildDto saveChild(ChildDto childDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
+        ParentDto parentDto = ParentDto.fromEntity(parent);
         List<Child> children = childRepository.findAll();
+        List<Parent> parents = parentRepository.findAll();
 
-        ChildValidationCheck.saveChildValidationCheck(childDto, children, parent);
+        ChildValidationCheck.saveChildValidationCheck(childDto, children, parents, parent, parentDto);
 
         return ChildDto.fromEntity(childRepository.save(Child.fromDto(
                 childDto,
@@ -57,10 +57,12 @@ public class ChildService {
 
     public ChildDto editChildren(ChildDto childDto, Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
-        List <Child> children = childRepository.findAll();
+        List<Child> children = childRepository.findAll();
+        List<Parent> parents = parentRepository.findAll();
         Parent parent = child.getParent();
+        ParentDto parentDto = ParentDto.fromEntity(parent);
 
-        ChildValidationCheck.editChildValidationCheck(childDto, children, child, parent);
+        ChildValidationCheck.editChildValidationCheck(childDto, children, parents, child, parent, parentDto);
 
         if (!child.getEmailAddress().equals(childDto.getEmailAddress())) {
             child.setEmailAddressVerified(false);
@@ -74,21 +76,15 @@ public class ChildService {
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
-    public ChildDto activateChildren(Integer childId) {
+    public ChildDto verifyEmailAddress(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
-        child.setActive(true);
+        child.setEmailAddressVerified(true);
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
     public ChildDto deactivateChildren(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
         child.setActive(false);
-        return ChildDto.fromEntity(childRepository.save(child));
-    }
-
-    public ChildDto verifyEmailAddress(Integer childId) {
-        Child child = childRepository.findById(childId).orElseThrow();
-        child.setEmailAddressVerified(true);
         return ChildDto.fromEntity(childRepository.save(child));
     }
 

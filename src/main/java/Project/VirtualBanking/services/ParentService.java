@@ -67,9 +67,9 @@ public class ParentService {
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
-    public ParentDto activateParent(Integer parentId) {
+    public ParentDto verifyEmailAddress(Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
-        parent.setActive(true);
+        parent.setEmailAddressVerified(true);
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
@@ -78,12 +78,6 @@ public class ParentService {
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
         parent.getPaymentInfo().forEach(paymentMethod -> paymentMethod.setActive(false));
-        return ParentDto.fromEntity(parentRepository.save(parent));
-    }
-
-    public ParentDto verifyEmailAddress(Integer parentId) {
-        Parent parent = parentRepository.findById(parentId).orElseThrow();
-        parent.setEmailAddressVerified(true);
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
