@@ -77,7 +77,7 @@ public class ParentService {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
-        parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
+        parent.getPaymentInfo().forEach(paymentMethod -> paymentMethod.setActive(false));
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
@@ -147,7 +147,7 @@ public class ParentService {
 
         parentsWithPaymentMethodsDto.forEach(
                 parentWithChildrenDto -> {
-                    parentWithChildrenDto.setPaymentMethodsDto(parentWithChildrenDto.getPaymentMethodsDto().stream()
+                    parentWithChildrenDto.setPaymentsInfoDto(parentWithChildrenDto.getPaymentsInfoDto().stream()
                             .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList()));
                 }
         );
@@ -163,8 +163,8 @@ public class ParentService {
                 parentRepository.findById(parentId).orElseThrow()
         );
 
-        parentWithPaymentInfoDto.setPaymentMethodsDto(
-                parentWithPaymentInfoDto.getPaymentMethodsDto().stream()
+        parentWithPaymentInfoDto.setPaymentsInfoDto(
+                parentWithPaymentInfoDto.getPaymentsInfoDto().stream()
                         .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList())
         );
         return parentWithPaymentInfoDto;

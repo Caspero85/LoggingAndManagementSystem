@@ -1,6 +1,7 @@
 package Project.VirtualBanking.services;
 import Project.VirtualBanking.OtherMethods.EntityValidationCheck.ChildValidationCheck;
 import Project.VirtualBanking.models.dtos.ChildDto;
+import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.entities.Child;
 import Project.VirtualBanking.models.entities.EncryptionKey;
 import Project.VirtualBanking.models.entities.Parent;
@@ -93,5 +94,13 @@ public class ChildService {
 
     public void deleteChild(Integer childId) {
         childRepository.deleteById(childId);
+    }
+
+    /**
+     * Parent related methods
+     */
+
+    public ParentDto findParentByChildId(Integer childId) {
+        return ParentDto.fromEntity(childRepository.findById(childId).orElseThrow().getParent());
     }
 }

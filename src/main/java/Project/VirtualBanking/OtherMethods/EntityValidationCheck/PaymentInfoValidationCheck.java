@@ -23,7 +23,7 @@ public class PaymentInfoValidationCheck {
         if (!parent.isEmailAddressVerified()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adres e-mail rodzica nie został zweryfikowany");
         }
-        if (parent.getPaymentMethods().stream().anyMatch(paymentMethod -> paymentMethod.isActive())) {
+        if (parent.getPaymentInfo().stream().anyMatch(paymentMethod -> paymentMethod.isActive())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rodzic ma już aktywną metodę płatności");
         }
 

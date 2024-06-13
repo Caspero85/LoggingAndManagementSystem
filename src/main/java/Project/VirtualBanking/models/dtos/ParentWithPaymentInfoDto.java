@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 public class ParentWithPaymentInfoDto {
 
     private ParentDto parentDto;
-    private List<PaymentInfoDto> paymentMethodsDto;
+    private List<PaymentInfoDto> paymentsInfoDto;
 
     public ParentWithPaymentInfoDto() {
     }
 
-    public ParentWithPaymentInfoDto(ParentDto parentDto, List<PaymentInfoDto> paymentMethodsDto) {
+    public ParentWithPaymentInfoDto(ParentDto parentDto, List<PaymentInfoDto> paymentsInfoDto) {
         this.parentDto = parentDto;
-        this.paymentMethodsDto = paymentMethodsDto;
+        this.paymentsInfoDto = paymentsInfoDto;
     }
 
     public ParentDto getParentDto() {
@@ -25,17 +25,17 @@ public class ParentWithPaymentInfoDto {
         this.parentDto = parentDto;
     }
 
-    public List<PaymentInfoDto> getPaymentMethodsDto() {
-        return paymentMethodsDto;
+    public List<PaymentInfoDto> getPaymentsInfoDto() {
+        return paymentsInfoDto;
     }
-    public void setPaymentMethodsDto(List<PaymentInfoDto> paymentMethodsDto) {
-        this.paymentMethodsDto = paymentMethodsDto;
+    public void setPaymentsInfoDto(List<PaymentInfoDto> paymentsInfoDto) {
+        this.paymentsInfoDto = paymentsInfoDto;
     }
 
     public static ParentWithPaymentInfoDto fromEntity(Parent parent){
         return new ParentWithPaymentInfoDto(
                 ParentDto.fromEntity(parent),
-                parent.getPaymentMethods().stream().map(paymentMethod -> PaymentInfoDto.fromEntity(paymentMethod))
+                parent.getPaymentInfo().stream().map(paymentInfo -> PaymentInfoDto.fromEntity(paymentInfo))
                         .collect(Collectors.toList())
         );
     }

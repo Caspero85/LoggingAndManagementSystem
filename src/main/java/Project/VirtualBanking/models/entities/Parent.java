@@ -51,7 +51,7 @@ public class Parent {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @OrderBy("active DESC")
-    private List<PaymentInfo> paymentInfos;
+    private List<PaymentInfo> paymentsInfo;
 
     public Parent() {
     }
@@ -162,11 +162,11 @@ public class Parent {
         this.children = children;
     }
 
-    public List<PaymentInfo> getPaymentMethods() {
-        return paymentInfos;
+    public List<PaymentInfo> getPaymentInfo() {
+        return paymentsInfo;
     }
-    public void setPaymentMethods(List<PaymentInfo> paymentInfos) {
-        this.paymentInfos = paymentInfos;
+    public void setPaymentInfo(List<PaymentInfo> paymentsInfo) {
+        this.paymentsInfo = paymentsInfo;
     }
 
     public static void encryptParent(Parent parent, ParentDto parentDto) {

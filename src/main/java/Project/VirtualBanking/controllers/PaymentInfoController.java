@@ -16,12 +16,12 @@ public class PaymentInfoController {
     }
 
     @PostMapping("/parent/{parentId}/payment-info")
-    public ResponseEntity<?> savePaymentMethod(
+    public ResponseEntity<?> savePaymentInfo(
             @RequestBody PaymentInfoDto paymentInfoDto,
             @PathVariable Integer parentId
     ) {
         try {
-            return ResponseEntity.ok(paymentInfoService.savePaymentMethod(paymentInfoDto, parentId));
+            return ResponseEntity.ok(paymentInfoService.savePaymentInfo(paymentInfoDto, parentId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
@@ -29,9 +29,9 @@ public class PaymentInfoController {
     }
 
     @GetMapping("/payment-info")
-    public ResponseEntity<?> findAllPaymentMethods() {
+    public ResponseEntity<?> findAllPaymentsInfo() {
         try {
-            return ResponseEntity.ok(paymentInfoService.findAllPaymentMethods());
+            return ResponseEntity.ok(paymentInfoService.findAllPaymentsInfo());
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
@@ -39,48 +39,62 @@ public class PaymentInfoController {
     }
 
     @GetMapping("/payment-info/active")
-    public ResponseEntity<?> findAllActivePaymentMethods() {
+    public ResponseEntity<?> findAllActivePaymentsInfo() {
         try {
-            return ResponseEntity.ok(paymentInfoService.findAllActivePaymentMethods());
+            return ResponseEntity.ok(paymentInfoService.findAllActivePaymentsInfo());
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @GetMapping("/payment-info/{paymentMethodId}")
-    public ResponseEntity<?> findPaymentMethodById(@PathVariable Integer paymentMethodId) {
+    @GetMapping("/payment-info/{paymentInfoId}")
+    public ResponseEntity<?> findPaymentInfoById(@PathVariable Integer paymentInfoId) {
         try {
-            return ResponseEntity.ok(paymentInfoService.findPaymentMethodById(paymentMethodId));
+            return ResponseEntity.ok(paymentInfoService.findPaymentsInfoById(paymentInfoId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @PutMapping("/payment-info/{paymentMethodId}/activate")
-    public ResponseEntity<?> activatePaymentMethod(@PathVariable Integer paymentMethodId) {
+    @PutMapping("/payment-info/{paymentInfoId}/activate")
+    public ResponseEntity<?> activatePaymentInfo(@PathVariable Integer paymentInfoId) {
         try {
-            return ResponseEntity.ok(paymentInfoService.activatePaymentMethod(paymentMethodId));
+            return ResponseEntity.ok(paymentInfoService.activatePaymentInfo(paymentInfoId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @PutMapping("/payment-info/{paymentMethodId}/deactivate")
-    public ResponseEntity<?> deactivatePaymentMethod(@PathVariable Integer paymentMethodId) {
+    @PutMapping("/payment-info/{paymentInfoId}/deactivate")
+    public ResponseEntity<?> deactivatePaymentInfo(@PathVariable Integer paymentInfoId) {
         try {
-            return ResponseEntity.ok(paymentInfoService.deactivatePaymentMethod(paymentMethodId));
+            return ResponseEntity.ok(paymentInfoService.deactivatePaymentInfo(paymentInfoId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @DeleteMapping("/payment-info/{paymentMethodId}/delete")
-    public ResponseEntity<Void> deletePaymentMethod(@PathVariable Integer paymentMethodId) {
-        paymentInfoService.deletePaymentMethod(paymentMethodId);
+    @DeleteMapping("/payment-info/{paymentInfoId}/delete")
+    public ResponseEntity<Void> deletePaymentInfo(@PathVariable Integer paymentInfoId) {
+        paymentInfoService.deletePaymentInfo(paymentInfoId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Parent related methods
+     */
+
+    @GetMapping("/payment-info/{paymentInfoId}/parent")
+    public ResponseEntity<?> findParentByPaymentInfoId(@PathVariable Integer paymentInfoId) {
+        try {
+            return ResponseEntity.ok(paymentInfoService.findParentByPaymentInfoId(paymentInfoId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 }

@@ -104,4 +104,18 @@ public class ChildController {
         childService.deleteChild(childId);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Parent related methods
+     */
+
+    @GetMapping("/child/{childId}/parent")
+    public ResponseEntity<?> findParentByChildId(@PathVariable Integer childId) {
+        try {
+            return ResponseEntity.ok(childService.findParentByChildId(childId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package Project.VirtualBanking.services;
 
 import Project.VirtualBanking.OtherMethods.EntityValidationCheck.PaymentInfoValidationCheck;
+import Project.VirtualBanking.models.dtos.ParentDto;
 import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import Project.VirtualBanking.models.entities.EncryptionKey;
 import Project.VirtualBanking.models.entities.Parent;
@@ -27,13 +28,13 @@ public class PaymentInfoService {
         this.encryptionKeyRepository = encryptionKeyRepository;
     }
 
-    public PaymentInfoDto savePaymentMethod(PaymentInfoDto paymentInfoDto, Integer parentId) {
+    public PaymentInfoDto savePaymentInfo(PaymentInfoDto paymentInfoDto, Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         List<PaymentInfo> paymentsInfo = paymentInfoRepository.findAll();
 
         PaymentInfoValidationCheck.saveCreditCardValidationCheck(paymentInfoDto, parent, paymentsInfo);
 
-        parent.getPaymentMethods().forEach(paymentMethod -> paymentMethod.setActive(false));
+        parent.getPaymentInfo().forEach(paymentInfo -> paymentInfo.setActive(false));
 
         return PaymentInfoDto.fromEntity(paymentInfoRepository.save(PaymentInfo.fromDto(
                 paymentInfoDto,
@@ -42,33 +43,41 @@ public class PaymentInfoService {
         )));
     }
 
-    public List<PaymentInfoDto> findAllPaymentMethods() {
+    public List<PaymentInfoDto> findAllPaymentsInfo() {
         return paymentInfoRepository.findAll().stream()
-                .map(paymentMethod -> PaymentInfoDto.fromEntity(paymentMethod)).collect(Collectors.toList());
+                .map(paymentInfo -> PaymentInfoDto.fromEntity(paymentInfo)).collect(Collectors.toList());
     }
 
-    public List<PaymentInfoDto> findAllActivePaymentMethods() {
-        return paymentInfoRepository.findAll().stream().filter(paymentMethod -> paymentMethod.isActive())
-                .map(paymentMethod -> PaymentInfoDto.fromEntity(paymentMethod)).collect(Collectors.toList());
+    public List<PaymentInfoDto> findAllActivePaymentsInfo() {
+        return paymentInfoRepository.findAll().stream().filter(paymentInfo -> paymentInfo.isActive())
+                .map(paymentInfo -> PaymentInfoDto.fromEntity(paymentInfo)).collect(Collectors.toList());
     }
 
-    public PaymentInfoDto findPaymentMethodById(Integer paymentMethodId) {
-        return PaymentInfoDto.fromEntity(paymentInfoRepository.findById(paymentMethodId).orElseThrow());
+    public PaymentInfoDto findPaymentsInfoById(Integer paymentInfoId) {
+        return PaymentInfoDto.fromEntity(paymentInfoRepository.findById(paymentInfoId).orElseThrow());
     }
 
-    public PaymentInfoDto activatePaymentMethod(Integer paymentMethodId) {
-        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentMethodId).orElseThrow();
+    public PaymentInfoDto activatePaymentInfo(Integer paymentInfoId) {
+        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
         paymentInfo.setActive(true);
         return PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
     }
 
-    public PaymentInfoDto deactivatePaymentMethod(Integer paymentMethodId) {
-        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentMethodId).orElseThrow();
+    public PaymentInfoDto deactivatePaymentInfo(Integer paymentInfoId) {
+        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
         paymentInfo.setActive(false);
         return PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
     }
 
-    public void deletePaymentMethod(Integer paymentMethodId) {
-        paymentInfoRepository.deleteById(paymentMethodId);
+    public void deletePaymentInfo(Integer paymentInfoId) {
+        paymentInfoRepository.deleteById(paymentInfoId);
+    }
+
+    /**
+     * Parent related methods
+     */
+
+    public ParentDto findParentByPaymentInfoId(Integer paymentInfoId) {
+        return ParentDto.fromEntity(paymentInfoRepository.findById(paymentInfoId).orElseThrow().getParent());
     }
 }
