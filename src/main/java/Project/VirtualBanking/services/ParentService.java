@@ -77,7 +77,7 @@ public class ParentService {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(false);
         parent.getChildren().forEach(child -> child.setActive(false));
-        parent.getPaymentInfo().forEach(paymentMethod -> paymentMethod.setActive(false));
+        parent.getPaymentInfo().forEach(paymentInfo -> paymentInfo.setActive(false));
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 
@@ -124,42 +124,42 @@ public class ParentService {
     }
 
     /**
-     * PaymentMethod related methods
+     * PaymentInfo related methods
      */
 
-    public List<ParentWithPaymentInfoDto> findAllParentsWithPaymentMethods() {
+    public List<ParentWithPaymentInfoDto> findAllParentsWithPaymentsInfo() {
         return parentRepository.findAll().stream()
                 .map(parent -> ParentWithPaymentInfoDto.fromEntity(parent))
                 .collect(Collectors.toList());
     }
 
-    public List<ParentWithPaymentInfoDto> findAllActiveParentsWithActivePaymentMethods() {
-        List<ParentWithPaymentInfoDto> parentsWithPaymentMethodsDto = parentRepository.findAll().stream()
+    public List<ParentWithPaymentInfoDto> findAllActiveParentsWithActivePaymentsInfo() {
+        List<ParentWithPaymentInfoDto> parentsWithPaymentsInfosDto = parentRepository.findAll().stream()
                 .filter(parent -> parent.isActive())
                 .map(parent -> ParentWithPaymentInfoDto.fromEntity(parent))
                 .collect(Collectors.toList());
 
-        parentsWithPaymentMethodsDto.forEach(
+        parentsWithPaymentsInfosDto.forEach(
                 parentWithChildrenDto -> {
                     parentWithChildrenDto.setPaymentsInfoDto(parentWithChildrenDto.getPaymentsInfoDto().stream()
-                            .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList()));
+                            .filter(paymentInfoDto -> paymentInfoDto.isActive()).collect(Collectors.toList()));
                 }
         );
-        return parentsWithPaymentMethodsDto;
+        return parentsWithPaymentsInfosDto;
     }
 
-    public ParentWithPaymentInfoDto findParentWithPaymentMethodsByParentId(Integer parentId) {
+    public ParentWithPaymentInfoDto findParentWithPaymentsInfoByParentId(Integer parentId) {
         return ParentWithPaymentInfoDto.fromEntity(parentRepository.findById(parentId).orElseThrow());
     }
 
-    public ParentWithPaymentInfoDto findParentWithActivePaymentMethodsByParentId(Integer parentId) {
+    public ParentWithPaymentInfoDto findParentWithActivePaymentsInfoByParentId(Integer parentId) {
         ParentWithPaymentInfoDto parentWithPaymentInfoDto = ParentWithPaymentInfoDto.fromEntity(
                 parentRepository.findById(parentId).orElseThrow()
         );
 
         parentWithPaymentInfoDto.setPaymentsInfoDto(
                 parentWithPaymentInfoDto.getPaymentsInfoDto().stream()
-                        .filter(paymentMethodDto -> paymentMethodDto.isActive()).collect(Collectors.toList())
+                        .filter(paymentInfoDto -> paymentInfoDto.isActive()).collect(Collectors.toList())
         );
         return parentWithPaymentInfoDto;
     }

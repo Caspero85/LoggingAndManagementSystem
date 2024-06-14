@@ -141,44 +141,44 @@ public class ParentController {
      * PaymentMethod related endpoints
      */
 
-    @GetMapping("/parents-with-payment-methods")
-    public ResponseEntity<?> findAllParentsWithPaymentMethods() {
+    @GetMapping("/parents-with-payments-info")
+    public ResponseEntity<?> findAllParentsWithPaymentsInfo() {
         try {
-            return ResponseEntity.ok(parentService.findAllParentsWithPaymentMethods());
+            return ResponseEntity.ok(parentService.findAllParentsWithPaymentsInfo());
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @GetMapping("/parents-with-payment-methods/active")
-    public ResponseEntity<?> findAllActiveParentsWithActivePaymentMethods() {
+    @GetMapping("/parents-with-payments-info/active")
+    public ResponseEntity<?> findAllActiveParentsWithActivePaymentsInfo() {
         try {
-            return ResponseEntity.ok(parentService.findAllActiveParentsWithActivePaymentMethods());
+            return ResponseEntity.ok(parentService.findAllActiveParentsWithActivePaymentsInfo());
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @GetMapping("/parent/{parentId}/payment-methods")
-    public ResponseEntity<?> findParentWithPaymentMethodsByParentId(
+    @GetMapping("/parent/{parentId}/payments-Info")
+    public ResponseEntity<?> findParentWithPaymentsInfoByParentId(
             @PathVariable Integer parentId
     ) {
         try {
-            return ResponseEntity.ok(parentService.findParentWithPaymentMethodsByParentId(parentId));
+            return ResponseEntity.ok(parentService.findParentWithPaymentsInfoByParentId(parentId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @GetMapping("/parent/{parentId}/payment-methods/active")
-    public ResponseEntity<?> findParentWithActivePaymentMethodsByParentId(
+    @GetMapping("/parent/{parentId}/payments-info/active")
+    public ResponseEntity<?> findParentWithActivePaymentsInfoByParentId(
             @PathVariable Integer parentId
     ) {
         try {
-            return ResponseEntity.ok(parentService.findParentWithActivePaymentMethodsByParentId(parentId));
+            return ResponseEntity.ok(parentService.findParentWithActivePaymentsInfoByParentId(parentId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

@@ -1,12 +1,10 @@
 package Project.VirtualBanking.models.entities;
 
 import Project.VirtualBanking.models.dtos.SubscriptionTypeDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class SubscriptionType {
@@ -29,6 +27,10 @@ public class SubscriptionType {
     private Boolean active;
 
     private String details;
+
+    @OneToMany(mappedBy = "subscriptionType", fetch = FetchType.LAZY)
+    private List<Subscription> subscriptions;
+
 
     public SubscriptionType() {
     }
@@ -89,6 +91,13 @@ public class SubscriptionType {
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     public static SubscriptionType fromDto(SubscriptionTypeDto subscriptionTypeDto) {

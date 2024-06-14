@@ -2,14 +2,14 @@ package Project.VirtualBanking.models.dtos;
 
 import Project.VirtualBanking.models.entities.Subscription;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class SubscriptionDto {
     private Integer subscriptionId;
     private Integer childId;
     private Integer subscriptionTypeId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Boolean active;
     private Boolean recursive;
     private String details;
@@ -17,8 +17,8 @@ public class SubscriptionDto {
     public SubscriptionDto() {
     }
 
-    public SubscriptionDto(Integer subscriptionId, Integer childId, Integer subscriptionTypeId, LocalDateTime startDate,
-                           LocalDateTime endDate, Boolean active, Boolean recursive, String details) {
+    public SubscriptionDto(Integer subscriptionId, Integer childId, Integer subscriptionTypeId, LocalDate startDate,
+                           LocalDate endDate, Boolean active, Boolean recursive, String details) {
         this.subscriptionId = subscriptionId;
         this.childId = childId;
         this.subscriptionTypeId = subscriptionTypeId;
@@ -50,17 +50,17 @@ public class SubscriptionDto {
         this.subscriptionTypeId = subscriptionTypeId;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

@@ -3,6 +3,7 @@ package Project.VirtualBanking.models.entities;
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,9 +21,11 @@ public class Subscription {
     @JoinColumn(name = "subscriptionTypeId", referencedColumnName = "subscriptionTypeId")
     private SubscriptionType subscriptionType;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
+
+    private LocalDateTime subscriptionCreationDate;
 
     private Boolean active;
 
@@ -30,12 +33,20 @@ public class Subscription {
 
     private String details;
 
+    @OneToOne(mappedBy = "subscription", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private SubscriptionPayment subscriptionPayment;
+
     public Subscription() {
     }
 
     public Subscription(Child child, SubscriptionType subscriptionType, String details) {
         this.child = child;
         this.subscriptionType = subscriptionType;
+        this.startDate = LocalDate.now();
+        this.endDate = LocalDate.now().plusMonths(subscriptionType.getHowManyMonths());
+        this.subscriptionCreationDate = LocalDateTime.now();
+        this.active = false;
+        this.recursive = false;
         this.details = details;
     }
 
@@ -60,18 +71,25 @@ public class Subscription {
         this.subscriptionType = subscriptionType;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public LocalDateTime getSubscriptionCreationDate() {
+        return subscriptionCreationDate;
+    }
+    public void setSubscriptionCreationDate(LocalDateTime subscriptionCreationDate) {
+        this.subscriptionCreationDate = subscriptionCreationDate;
     }
 
     public Boolean isActive() {
@@ -93,6 +111,13 @@ public class Subscription {
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public SubscriptionPayment getSubscriptionPayment() {
+        return subscriptionPayment;
+    }
+    public void setSubscriptionPayment(SubscriptionPayment subscriptionPayment) {
+        this.subscriptionPayment = subscriptionPayment;
     }
 
     public static Subscription fromDto(SubscriptionDto subscriptionDto, Child child, SubscriptionType subscriptionType) {

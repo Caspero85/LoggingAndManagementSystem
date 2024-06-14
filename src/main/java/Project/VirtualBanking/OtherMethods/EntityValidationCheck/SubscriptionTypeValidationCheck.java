@@ -39,7 +39,7 @@ public class SubscriptionTypeValidationCheck {
         if (!subscriptionType.isActive()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Nie można edytować subskrypcji ponieważ subskrypcja jest nieaktywna"
+                    "Nie można edytować subskrypcji, ponieważ, subskrypcja jest nieaktywna"
             );
         }
 
@@ -51,7 +51,7 @@ public class SubscriptionTypeValidationCheck {
             ) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
-                        "Nie można edytować subskrypcji ponieważ istnieje już aktywna subskrypcja o podanym typie edukacji i długości trwania"
+                        "Nie można edytować subskrypcji, ponieważ, istnieje już aktywna subskrypcja o podanym typie edukacji i długości trwania"
                 );
             }
         }

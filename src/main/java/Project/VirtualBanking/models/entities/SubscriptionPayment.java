@@ -13,7 +13,7 @@ public class SubscriptionPayment {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscriptionId", referencedColumnName = "subscriptionId")
-    private Subscription subscriptionId;
+    private Subscription subscription;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paymentInfoId", referencedColumnName = "paymentInfoId")
@@ -30,10 +30,10 @@ public class SubscriptionPayment {
     public SubscriptionPayment() {
     }
 
-    public SubscriptionPayment(Subscription subscriptionId, PaymentInfo paymentInfo, String details) {
-        this.subscriptionId = subscriptionId;
+    public SubscriptionPayment(Subscription subscription, PaymentInfo paymentInfo, String details) {
+        this.subscription = subscription;
         this.paymentInfo = paymentInfo;
-        this.amount = subscriptionId.getSubscriptionType().getPrice();
+        this.amount = subscription.getSubscriptionType().getPrice();
         this.paid = false;
         this.paymentDate = LocalDateTime.now();
         this.details = details;
@@ -46,11 +46,11 @@ public class SubscriptionPayment {
         this.subscriptionPaymentId = subscriptionPaymentId;
     }
 
-    public Subscription getSubscriptionId() {
-        return subscriptionId;
+    public Subscription getSubscription() {
+        return subscription;
     }
-    public void setSubscriptionId(Subscription subscriptionId) {
-        this.subscriptionId = subscriptionId;
+    public void setSubscription(Subscription subscriptionId) {
+        this.subscription = subscriptionId;
     }
 
     public PaymentInfo getPaymentInfo() {

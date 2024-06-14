@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Child {
@@ -44,6 +45,9 @@ public class Child {
     private Boolean active;
 
     private String details;
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Subscription> subscriptions;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "keyId", referencedColumnName = "keyId")
@@ -152,6 +156,13 @@ public class Child {
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     public EncryptionKey getEncryptionKey() {

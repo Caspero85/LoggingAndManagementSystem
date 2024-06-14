@@ -5,6 +5,7 @@ import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class PaymentInfo {
@@ -34,6 +35,9 @@ public class PaymentInfo {
     private Boolean active;
 
     private String details;
+
+    @OneToMany(mappedBy = "paymentInfo", fetch = FetchType.LAZY)
+    private List<SubscriptionPayment> subscriptionPayment;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "keyId", referencedColumnName = "keyId")
@@ -116,6 +120,13 @@ public class PaymentInfo {
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public List<SubscriptionPayment> getSubscriptionPayment() {
+        return subscriptionPayment;
+    }
+    public void setSubscriptionPayment(List<SubscriptionPayment> subscriptionPayment) {
+        this.subscriptionPayment = subscriptionPayment;
     }
 
     public EncryptionKey getEncryptionKey() {
