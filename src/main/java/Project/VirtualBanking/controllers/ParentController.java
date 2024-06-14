@@ -89,7 +89,7 @@ public class ParentController {
     public ResponseEntity<?> deleteParent(@PathVariable Integer parentId) {
         try {
             parentService.deleteParent(parentId);
-            return ResponseEntity.ok("Rodzic został usunięty.");
+            return ResponseEntity.ok("Rodzic został usunięty");
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

@@ -85,7 +85,7 @@ public class PaymentInfoController {
     public ResponseEntity<?> deletePaymentInfo(@PathVariable Integer paymentInfoId) {
         try {
             paymentInfoService.deletePaymentInfo(paymentInfoId);
-            return ResponseEntity.ok("Płatność została usunięta.");
+            return ResponseEntity.ok("Płatność została usunięta");
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

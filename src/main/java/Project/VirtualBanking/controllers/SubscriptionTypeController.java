@@ -79,7 +79,7 @@ public class SubscriptionTypeController {
     public ResponseEntity<?> deleteSubscriptionType(@PathVariable Integer subscriptionTypeId) {
         try {
             subscriptionTypeService.deleteSubscriptionType(subscriptionTypeId);
-            return ResponseEntity.ok("Typ subskrypcji został usunięty.");
+            return ResponseEntity.ok("Typ subskrypcji został usunięty");
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

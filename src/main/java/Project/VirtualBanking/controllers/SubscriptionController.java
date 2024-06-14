@@ -83,6 +83,26 @@ public class SubscriptionController {
         }
     }
 
+    @PutMapping("/subscription/{subscriptionId}/recursive")
+    public ResponseEntity<?> recursiveSubscription(@PathVariable Integer subscriptionId) {
+        try {
+            return ResponseEntity.ok(subscriptionService.recursiveSubscription(subscriptionId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
+
+    @PutMapping("/subscription/{subscriptionId}/not-recursive")
+    public ResponseEntity<?> notRecursiveSubscription(@PathVariable Integer subscriptionId) {
+        try {
+            return ResponseEntity.ok(subscriptionService.notRecursiveSubscription(subscriptionId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
+
     @PutMapping("/subscription/{subscriptionId}/deactivate")
     public ResponseEntity<?> deactivateSubscription(@PathVariable Integer subscriptionId) {
         try {
@@ -97,7 +117,7 @@ public class SubscriptionController {
     public ResponseEntity<?> deleteSubscription(@PathVariable Integer subscriptionId) {
         try {
             subscriptionService.deleteSubscription(subscriptionId);
-            return ResponseEntity.ok("Subskrypcja została usunięta.");
+            return ResponseEntity.ok("Subskrypcja została usunięta");
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

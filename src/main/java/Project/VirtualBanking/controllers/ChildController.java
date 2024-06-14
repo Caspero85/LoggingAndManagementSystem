@@ -93,7 +93,7 @@ public class ChildController {
     public ResponseEntity<?> deleteChild(@PathVariable Integer childId) {
         try {
             childService.deleteChild(childId);
-            return ResponseEntity.ok("Dziecko zostało usunięte.");
+            return ResponseEntity.ok("Dziecko zostało usunięte");
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

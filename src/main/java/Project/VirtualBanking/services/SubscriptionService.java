@@ -85,6 +85,18 @@ public class SubscriptionService {
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
     }
 
+    public SubscriptionDto recursiveSubscription(Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
+        subscription.setRecursive(true);
+        return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
+    }
+
+    public SubscriptionDto notRecursiveSubscription(Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
+        subscription.setRecursive(true);
+        return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
+    }
+
     public SubscriptionDto deactivateSubscription(Integer subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
         subscription.setActive(false);
