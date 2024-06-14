@@ -90,9 +90,14 @@ public class ChildController {
     }
 
     @DeleteMapping("/child/{childId}/delete")
-    public ResponseEntity<Void> deleteChild(@PathVariable Integer childId) {
-        childService.deleteChild(childId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteChild(@PathVariable Integer childId) {
+        try {
+            childService.deleteChild(childId);
+            return ResponseEntity.ok("Dziecko zostało usunięte.");
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     /**

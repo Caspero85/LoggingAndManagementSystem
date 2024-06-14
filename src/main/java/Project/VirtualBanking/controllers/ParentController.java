@@ -86,9 +86,14 @@ public class ParentController {
     }
 
     @DeleteMapping("/parent/{parentId}/delete")
-    public ResponseEntity<Void> deleteParent(@PathVariable Integer parentId) {
-        parentService.deleteParent(parentId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteParent(@PathVariable Integer parentId) {
+        try {
+            parentService.deleteParent(parentId);
+            return ResponseEntity.ok("Rodzic został usunięty.");
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     /**

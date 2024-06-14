@@ -1,5 +1,6 @@
 package Project.VirtualBanking.services;
 
+import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
 import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
 import Project.VirtualBanking.models.entities.*;
@@ -92,5 +93,13 @@ public class SubscriptionService {
 
     public void deleteSubscription(Integer subscriptionId) {
         subscriptionRepository.deleteById(subscriptionId);
+    }
+
+    /**
+     * Child related methods
+     */
+
+    public ChildDto findChildBySubscriptionId(Integer subscriptionId) {
+        return ChildDto.fromEntity(subscriptionRepository.findById(subscriptionId).orElseThrow().getChild());
     }
 }

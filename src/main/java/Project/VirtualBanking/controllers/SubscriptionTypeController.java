@@ -76,8 +76,13 @@ public class SubscriptionTypeController {
     }
 
     @DeleteMapping("/subscription-type/{subscriptionTypeId}/delete")
-    public ResponseEntity<Void> deleteSubscriptionType(@PathVariable Integer subscriptionTypeId) {
-        subscriptionTypeService.deleteSubscriptionType(subscriptionTypeId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteSubscriptionType(@PathVariable Integer subscriptionTypeId) {
+        try {
+            subscriptionTypeService.deleteSubscriptionType(subscriptionTypeId);
+            return ResponseEntity.ok("Typ subskrypcji został usunięty.");
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 }

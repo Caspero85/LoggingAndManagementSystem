@@ -82,9 +82,14 @@ public class PaymentInfoController {
     }
 
     @DeleteMapping("/payment-info/{paymentInfoId}/delete")
-    public ResponseEntity<Void> deletePaymentInfo(@PathVariable Integer paymentInfoId) {
-        paymentInfoService.deletePaymentInfo(paymentInfoId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deletePaymentInfo(@PathVariable Integer paymentInfoId) {
+        try {
+            paymentInfoService.deletePaymentInfo(paymentInfoId);
+            return ResponseEntity.ok("Płatność została usunięta.");
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
     }
 
     /**
