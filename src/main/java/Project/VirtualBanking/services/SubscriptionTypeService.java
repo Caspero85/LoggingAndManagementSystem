@@ -46,6 +46,12 @@ public class SubscriptionTypeService {
         return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow());
     }
 
+    public SubscriptionTypeDto editSubscriptionTypeDetails(Integer subscriptionTypeId, SubscriptionTypeDto subscriptionTypeDto) {
+        SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
+        subscriptionType.setDetails(subscriptionTypeDto.getDetails());
+        return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.save(subscriptionType));
+    }
+
     public SubscriptionTypeDto deactivateSubscriptionType(Integer subscriptionTypeId) {
         SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
         subscriptionType.setActive(false);

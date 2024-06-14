@@ -58,6 +58,19 @@ public class PaymentInfoController {
         }
     }
 
+    @PutMapping("/payment-info/{paymentInfoId}/edit")
+    public ResponseEntity<?> editPaymentInfoDetails(
+            @PathVariable Integer paymentInfoId,
+            @RequestBody PaymentInfoDto paymentInfoDto
+    ) {
+        try {
+            return ResponseEntity.ok(paymentInfoService.editPaymentInfoDetails(paymentInfoId, paymentInfoDto));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
+
     @PutMapping("/payment-info/{paymentInfoId}/deactivate")
     public ResponseEntity<?> deactivatePaymentInfo(@PathVariable Integer paymentInfoId) {
         try {
