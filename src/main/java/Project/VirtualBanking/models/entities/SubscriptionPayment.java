@@ -1,5 +1,6 @@
 package Project.VirtualBanking.models.entities;
 
+import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -86,5 +87,15 @@ public class SubscriptionPayment {
     }
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public static SubscriptionPayment fromDto(
+            SubscriptionPaymentDto subscriptionPaymentDto, Subscription subscription, PaymentInfo paymentInfo
+    ) {
+        return new SubscriptionPayment(
+                subscription,
+                paymentInfo,
+                subscriptionPaymentDto.getDetails()
+        );
     }
 }
