@@ -76,8 +76,16 @@ public class ParentService {
     public ParentDto deactivateParent(Integer parentId) {
         Parent parent = parentRepository.findById(parentId).orElseThrow();
         parent.setActive(false);
-        parent.getChildren().forEach(child -> child.setActive(false));
+
+        parent.getChildren().forEach(child -> {
+                child.setActive(false);
+                child.getSubscriptions().forEach(subscription -> {
+                    subscription.setActive(false);
+                    subscription.setRecursive(false);
+                });
+        });
         parent.getPaymentInfo().forEach(paymentInfo -> paymentInfo.setActive(false));
+
         return ParentDto.fromEntity(parentRepository.save(parent));
     }
 

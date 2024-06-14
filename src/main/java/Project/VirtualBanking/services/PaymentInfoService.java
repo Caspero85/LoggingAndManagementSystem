@@ -65,11 +65,27 @@ public class PaymentInfoService {
 
     public PaymentInfoDto deactivatePaymentInfo(Integer paymentInfoId) {
         PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
+
         paymentInfo.setActive(false);
+
+        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment -> {
+            subscriptionPayment.getSubscription().setActive(false);
+            subscriptionPayment.getSubscription().setRecursive(false);
+        });
+
         return PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
     }
 
     public void deletePaymentInfo(Integer paymentInfoId) {
+        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
+
+        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment -> {
+            subscriptionPayment.getSubscription().setActive(false);
+            subscriptionPayment.getSubscription().setRecursive(false);
+        });
+
+        PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
+
         paymentInfoRepository.deleteById(paymentInfoId);
     }
 

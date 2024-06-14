@@ -84,7 +84,14 @@ public class ChildService {
 
     public ChildDto deactivateChildren(Integer childId) {
         Child child = childRepository.findById(childId).orElseThrow();
+
         child.setActive(false);
+
+        child.getSubscriptions().forEach(subscription -> {
+            subscription.setActive(false);
+            subscription.setRecursive(false);
+        });
+
         return ChildDto.fromEntity(childRepository.save(child));
     }
 
