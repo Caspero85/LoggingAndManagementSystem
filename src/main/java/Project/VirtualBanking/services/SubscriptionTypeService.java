@@ -46,23 +46,6 @@ public class SubscriptionTypeService {
         return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow());
     }
 
-    public SubscriptionTypeDto editSubscriptionType(SubscriptionTypeDto subscriptionTypeDto, Integer subscriptionTypeId) {
-        SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
-        List<SubscriptionType> subscriptionTypes = subscriptionTypeRepository.findAll();
-
-        SubscriptionTypeValidationCheck.editSubscriptionTypeValidationCheck(
-                subscriptionTypeDto, subscriptionTypes, subscriptionType
-        );
-
-        BeanUtils.copyProperties(
-                subscriptionTypeDto,
-                subscriptionType,
-                "subscriptionTypeId", "subscriptionTypeCreationDate", "active"
-        );
-
-        return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.save(subscriptionType));
-    }
-
     public SubscriptionTypeDto deactivateSubscriptionType(Integer subscriptionTypeId) {
         SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
         subscriptionType.setActive(false);

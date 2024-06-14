@@ -55,19 +55,6 @@ public class SubscriptionTypeController {
         }
     }
 
-    @PutMapping("/subscription-type/{subscriptionTypeId}/edit")
-    public ResponseEntity<?> editSubscriptionType(
-            @RequestBody SubscriptionTypeDto subscriptionTypeDto,
-            @PathVariable Integer subscriptionTypeId
-    ) {
-        try {
-            return ResponseEntity.ok(subscriptionTypeService.editSubscriptionType(subscriptionTypeDto, subscriptionTypeId));
-        }
-        catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
-        }
-    }
-
     @PutMapping("/subscription-type/{subscriptionTypeId}/deactivate")
     public ResponseEntity<?> deactivateSubscriptionType(@PathVariable Integer subscriptionTypeId) {
         try {
