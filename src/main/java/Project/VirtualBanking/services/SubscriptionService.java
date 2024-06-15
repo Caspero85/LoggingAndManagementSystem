@@ -1,14 +1,16 @@
 package Project.VirtualBanking.services;
 
+import Project.VirtualBanking.OtherMethods.EntityValidationCheck.SubscriptionValidationCheck;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
-import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
 import Project.VirtualBanking.models.dtos.SubscriptionTypeDto;
 import Project.VirtualBanking.models.entities.*;
 import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.SubscriptionRepository;
 import Project.VirtualBanking.repositories.SubscriptionTypeRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,9 +39,11 @@ public class SubscriptionService {
             Integer childId, Integer subscriptionTypeId
     ) {
         Child child = childRepository.findById(childId).orElseThrow();
-        SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
+        SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElse(null);
         PaymentInfo paymentInfo = child.getParent().getPaymentInfo().stream()
-                .filter(paymentInfoActive -> paymentInfoActive.isActive()).findFirst().orElseThrow();
+                .filter(paymentInfoActive -> paymentInfoActive.isActive()).findFirst().orElse(null);
+
+        SubscriptionValidationCheck.saveSubscriptionValidationCheck(child, paymentInfo, subscriptionType);
 
         Subscription subscription = subscriptionRepository.save(new Subscription(child, subscriptionType));
 
@@ -85,13 +89,21 @@ public class SubscriptionService {
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
     }
 
-    public SubscriptionDto recursiveSubscription(Integer subscriptionId) {
-        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
+    public SubscriptionDto recursiveOnSubscription(Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
+
+        if (subscription == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Podana subskrypcja nie istnieje");
+        }
+
+        SubscriptionValidationCheck.recursiveOnSubscriptionValidationCheck(subscription);
+
         subscription.setRecursive(true);
+
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
     }
 
-    public SubscriptionDto notRecursiveSubscription(Integer subscriptionId) {
+    public SubscriptionDto recursiveOffSubscription(Integer subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
         subscription.setRecursive(false);
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
@@ -99,7 +111,10 @@ public class SubscriptionService {
 
     public SubscriptionDto deactivateSubscription(Integer subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
+
         subscription.setActive(false);
+        subscription.setRecursive(false);
+
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
     }
 

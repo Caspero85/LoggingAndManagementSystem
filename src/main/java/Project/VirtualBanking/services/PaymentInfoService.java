@@ -76,14 +76,6 @@ public class PaymentInfoService {
     }
 
     public void deletePaymentInfo(Integer paymentInfoId) {
-        PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
-
-        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment ->
-            subscriptionPayment.getSubscription().setRecursive(false)
-        );
-
-        PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
-
         paymentInfoRepository.deleteById(paymentInfoId);
     }
 

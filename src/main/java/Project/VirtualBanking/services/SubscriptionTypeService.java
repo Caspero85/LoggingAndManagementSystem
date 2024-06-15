@@ -2,6 +2,7 @@ package Project.VirtualBanking.services;
 
 import Project.VirtualBanking.OtherMethods.EntityValidationCheck.SubscriptionTypeValidationCheck;
 import Project.VirtualBanking.models.dtos.SubscriptionTypeDto;
+import Project.VirtualBanking.models.entities.Subscription;
 import Project.VirtualBanking.models.entities.SubscriptionType;
 import Project.VirtualBanking.repositories.SubscriptionTypeRepository;
 import org.springframework.beans.BeanUtils;
@@ -54,7 +55,11 @@ public class SubscriptionTypeService {
 
     public SubscriptionTypeDto deactivateSubscriptionType(Integer subscriptionTypeId) {
         SubscriptionType subscriptionType = subscriptionTypeRepository.findById(subscriptionTypeId).orElseThrow();
+
         subscriptionType.setActive(false);
+
+        subscriptionType.getSubscriptions().forEach(subscription -> subscription.setRecursive(false));
+
         return SubscriptionTypeDto.fromEntity(subscriptionTypeRepository.save(subscriptionType));
     }
 

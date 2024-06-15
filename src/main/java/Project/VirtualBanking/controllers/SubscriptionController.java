@@ -1,7 +1,6 @@
 package Project.VirtualBanking.controllers;
 
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
-import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
 import Project.VirtualBanking.services.SubscriptionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,20 +79,20 @@ public class SubscriptionController {
         }
     }
 
-    @PutMapping("/subscription/{subscriptionId}/recursive")
-    public ResponseEntity<?> recursiveSubscription(@PathVariable Integer subscriptionId) {
+    @PutMapping("/subscription/{subscriptionId}/recursive-on")
+    public ResponseEntity<?> recursiveOnSubscription(@PathVariable Integer subscriptionId) {
         try {
-            return ResponseEntity.ok(subscriptionService.recursiveSubscription(subscriptionId));
+            return ResponseEntity.ok(subscriptionService.recursiveOnSubscription(subscriptionId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    @PutMapping("/subscription/{subscriptionId}/not-recursive")
-    public ResponseEntity<?> notRecursiveSubscription(@PathVariable Integer subscriptionId) {
+    @PutMapping("/subscription/{subscriptionId}/recursive-off")
+    public ResponseEntity<?> recursiveOffSubscription(@PathVariable Integer subscriptionId) {
         try {
-            return ResponseEntity.ok(subscriptionService.notRecursiveSubscription(subscriptionId));
+            return ResponseEntity.ok(subscriptionService.recursiveOffSubscription(subscriptionId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
