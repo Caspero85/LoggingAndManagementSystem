@@ -28,7 +28,7 @@ public class SubscriptionType {
 
     private String details;
 
-    @OneToMany(mappedBy = "subscriptionType", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subscriptionType", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Subscription> subscriptions;
 
 

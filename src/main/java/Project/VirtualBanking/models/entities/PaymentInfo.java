@@ -36,7 +36,7 @@ public class PaymentInfo {
 
     private String details;
 
-    @OneToMany(mappedBy = "paymentInfo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "paymentInfo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<SubscriptionPayment> subscriptionPayment;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
