@@ -1,5 +1,6 @@
 package Project.VirtualBanking.services;
 
+import Project.VirtualBanking.models.dtos.PaymentInfoDto;
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
 import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
 import Project.VirtualBanking.models.entities.PaymentInfo;
@@ -60,5 +61,13 @@ public class SubscriptionPaymentService {
 
     public SubscriptionDto findSubscriptionBySubscriptionPaymentId(Integer subscriptionPaymentId) {
         return SubscriptionDto.fromEntity(subscriptionPaymentRepository.findById(subscriptionPaymentId).orElseThrow().getSubscription());
+    }
+
+    /**
+     * PaymentInfo related methods
+     */
+
+    public PaymentInfoDto findPaymentInfoBySubscriptionPaymentId(Integer subscriptionPaymentId) {
+        return PaymentInfoDto.fromEntity(subscriptionPaymentRepository.findById(subscriptionPaymentId).orElseThrow().getPaymentInfo());
     }
 }

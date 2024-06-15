@@ -66,5 +66,18 @@ public class SubscriptionPaymentController {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
+
+    /**
+     * PaymentInfo related methods
+     */
+
+    @GetMapping("/subscription-payment/{subscriptionPaymentId}/payment-info")
+    public ResponseEntity<?> findPaymentInfoBySubscriptionPaymentId(@PathVariable Integer subscriptionPaymentId) {
+        try {
+            return ResponseEntity.ok(subscriptionPaymentService.findPaymentInfoBySubscriptionPaymentId(subscriptionPaymentId));
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
 }
 
