@@ -68,10 +68,9 @@ public class PaymentInfoService {
 
         paymentInfo.setActive(false);
 
-        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment -> {
-            subscriptionPayment.getSubscription().setActive(false);
-            subscriptionPayment.getSubscription().setRecursive(false);
-        });
+        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment ->
+            subscriptionPayment.getSubscription().setRecursive(false)
+        );
 
         return PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
     }
@@ -79,10 +78,9 @@ public class PaymentInfoService {
     public void deletePaymentInfo(Integer paymentInfoId) {
         PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElseThrow();
 
-        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment -> {
-            subscriptionPayment.getSubscription().setActive(false);
-            subscriptionPayment.getSubscription().setRecursive(false);
-        });
+        paymentInfo.getSubscriptionPayment().forEach(subscriptionPayment ->
+            subscriptionPayment.getSubscription().setRecursive(false)
+        );
 
         PaymentInfoDto.fromEntity(paymentInfoRepository.save(paymentInfo));
 

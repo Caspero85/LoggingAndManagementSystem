@@ -18,14 +18,11 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping("/child/{childId}/subscription/{subscriptionTypeId}")
+    @PostMapping("/child/{childId}/subscription-type/{subscriptionTypeId}/subscription")
     public ResponseEntity<?> saveSubscription(
-            @PathVariable Integer childId, @PathVariable Integer subscriptionTypeId,
-            @RequestBody SubscriptionDto subscriptionDto, @RequestBody SubscriptionPaymentDto subscriptionPaymentDto) {
+            @PathVariable Integer childId, @PathVariable Integer subscriptionTypeId) {
         try {
-            return ResponseEntity.ok(subscriptionService.saveSubscription(
-                    subscriptionDto, subscriptionPaymentDto, childId, subscriptionTypeId
-            ));
+            return ResponseEntity.ok(subscriptionService.saveSubscription(childId, subscriptionTypeId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
@@ -132,6 +129,20 @@ public class SubscriptionController {
     public ResponseEntity<?> findChildBySubscriptionId(@PathVariable Integer subscriptionId) {
         try {
             return ResponseEntity.ok(subscriptionService.findChildBySubscriptionId(subscriptionId));
+        }
+        catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
+
+    /**
+     * SubscriptionType related methods
+     */
+
+    @GetMapping("/subscription/{subscriptionId}/subscription-type")
+    public ResponseEntity<?> findSubscriptionTypeBySubscriptionId(@PathVariable Integer subscriptionId) {
+        try {
+            return ResponseEntity.ok(subscriptionService.findSubscriptionTypeBySubscriptionId(subscriptionId));
         }
         catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());

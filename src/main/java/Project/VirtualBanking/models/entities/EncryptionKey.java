@@ -19,6 +19,9 @@ public class EncryptionKey {
     @OneToOne(mappedBy = "encryptionKey", fetch = FetchType.LAZY)
     private Child child;
 
+    @OneToOne(mappedBy = "encryptionKey", fetch = FetchType.LAZY)
+    private PaymentInfo paymentInfo;
+
     public EncryptionKey() {
         this.encryptionKey = generateRandomKey();
     }
@@ -49,6 +52,13 @@ public class EncryptionKey {
     }
     public void setChild(Child child) {
         this.child = child;
+    }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+    public void setPaymentInfo(PaymentInfo paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 
     private String generateRandomKey() {

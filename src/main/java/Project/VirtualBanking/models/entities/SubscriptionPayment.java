@@ -31,13 +31,12 @@ public class SubscriptionPayment {
     public SubscriptionPayment() {
     }
 
-    public SubscriptionPayment(Subscription subscription, PaymentInfo paymentInfo, String details) {
+    public SubscriptionPayment(Subscription subscription, PaymentInfo paymentInfo) {
         this.subscription = subscription;
         this.paymentInfo = paymentInfo;
         this.amount = subscription.getSubscriptionType().getPrice();
         this.paid = false;
         this.paymentDate = LocalDateTime.now();
-        this.details = details;
     }
 
     public Integer getSubscriptionPaymentId() {
@@ -87,15 +86,5 @@ public class SubscriptionPayment {
     }
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    public static SubscriptionPayment fromDto(
-            SubscriptionPaymentDto subscriptionPaymentDto, Subscription subscription, PaymentInfo paymentInfo
-    ) {
-        return new SubscriptionPayment(
-                subscription,
-                paymentInfo,
-                subscriptionPaymentDto.getDetails()
-        );
     }
 }

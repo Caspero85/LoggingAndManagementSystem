@@ -39,7 +39,7 @@ public class Subscription {
     public Subscription() {
     }
 
-    public Subscription(Child child, SubscriptionType subscriptionType, String details) {
+    public Subscription(Child child, SubscriptionType subscriptionType) {
         this.child = child;
         this.subscriptionType = subscriptionType;
         this.startDate = LocalDate.now();
@@ -47,7 +47,6 @@ public class Subscription {
         this.subscriptionCreationDate = LocalDateTime.now();
         this.active = false;
         this.recursive = false;
-        this.details = details;
     }
 
     public Integer getSubscriptionId() {
@@ -118,13 +117,5 @@ public class Subscription {
     }
     public void setSubscriptionPayment(SubscriptionPayment subscriptionPayment) {
         this.subscriptionPayment = subscriptionPayment;
-    }
-
-    public static Subscription fromDto(SubscriptionDto subscriptionDto, Child child, SubscriptionType subscriptionType) {
-        return new Subscription(
-                child,
-                subscriptionType,
-                subscriptionDto.getDetails()
-        );
     }
 }

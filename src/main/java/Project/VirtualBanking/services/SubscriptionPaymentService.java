@@ -30,14 +30,8 @@ public class SubscriptionPaymentService {
         this.paymentInfoRepository = paymentInfoRepository;
     }
 
-    public SubscriptionPayment saveSubscriptionPayment(
-            SubscriptionPaymentDto subscriptionPaymentDto, Subscription subscription, PaymentInfo paymentInfo
-    ) {
-        return subscriptionPaymentRepository.save(SubscriptionPayment.fromDto(
-                subscriptionPaymentDto,
-                subscription,
-                paymentInfo
-        ));
+    public SubscriptionPayment saveSubscriptionPayment(Subscription subscription, PaymentInfo paymentInfo) {
+        return subscriptionPaymentRepository.save(new SubscriptionPayment(subscription, paymentInfo));
     }
 
     public List<SubscriptionPaymentDto> findAllSubscriptionPayments() {
@@ -58,5 +52,13 @@ public class SubscriptionPaymentService {
 
     public void deleteSubscriptionPayment(Integer subscriptionPaymentId) {
         subscriptionPaymentRepository.deleteById(subscriptionPaymentId);
+    }
+
+    /**
+     * Subscription related methods
+     */
+
+    public SubscriptionDto findSubscriptionBySubscriptionPaymentId(Integer subscriptionPaymentId) {
+        return SubscriptionDto.fromEntity(subscriptionPaymentRepository.findById(subscriptionPaymentId).orElseThrow().getSubscription());
     }
 }

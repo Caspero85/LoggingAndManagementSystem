@@ -3,6 +3,7 @@ package Project.VirtualBanking.services;
 import Project.VirtualBanking.models.dtos.ChildDto;
 import Project.VirtualBanking.models.dtos.SubscriptionDto;
 import Project.VirtualBanking.models.dtos.SubscriptionPaymentDto;
+import Project.VirtualBanking.models.dtos.SubscriptionTypeDto;
 import Project.VirtualBanking.models.entities.*;
 import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.SubscriptionRepository;
@@ -33,7 +34,6 @@ public class SubscriptionService {
     }
 
     public SubscriptionDto saveSubscription(
-            SubscriptionDto subscriptionDto, SubscriptionPaymentDto subscriptionPaymentDto,
             Integer childId, Integer subscriptionTypeId
     ) {
         Child child = childRepository.findById(childId).orElseThrow();
@@ -41,10 +41,10 @@ public class SubscriptionService {
         PaymentInfo paymentInfo = child.getParent().getPaymentInfo().stream()
                 .filter(paymentInfoActive -> paymentInfoActive.isActive()).findFirst().orElseThrow();
 
-        Subscription subscription = Subscription.fromDto(subscriptionDto, child, subscriptionType);
+        Subscription subscription = subscriptionRepository.save(new Subscription(child, subscriptionType));
 
         SubscriptionPayment subscriptionPayment = subscriptionPaymentService.saveSubscriptionPayment(
-                subscriptionPaymentDto, subscription, paymentInfo
+                subscription, paymentInfo
         );
 
         /**
@@ -93,7 +93,7 @@ public class SubscriptionService {
 
     public SubscriptionDto notRecursiveSubscription(Integer subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElseThrow();
-        subscription.setRecursive(true);
+        subscription.setRecursive(false);
         return SubscriptionDto.fromEntity(subscriptionRepository.save(subscription));
     }
 
@@ -113,5 +113,13 @@ public class SubscriptionService {
 
     public ChildDto findChildBySubscriptionId(Integer subscriptionId) {
         return ChildDto.fromEntity(subscriptionRepository.findById(subscriptionId).orElseThrow().getChild());
+    }
+
+    /**
+     * SubscriptionType related methods
+     */
+
+    public SubscriptionTypeDto findSubscriptionTypeBySubscriptionId(Integer subscriptionId) {
+        return SubscriptionTypeDto.fromEntity(subscriptionRepository.findById(subscriptionId).orElseThrow().getSubscriptionType());
     }
 }
