@@ -9,9 +9,11 @@ import Project.VirtualBanking.repositories.ChildRepository;
 import Project.VirtualBanking.repositories.SubscriptionRepository;
 import Project.VirtualBanking.repositories.SubscriptionTypeRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,5 +138,35 @@ public class SubscriptionService {
 
     public SubscriptionTypeDto findSubscriptionTypeBySubscriptionId(Integer subscriptionId) {
         return SubscriptionTypeDto.fromEntity(subscriptionRepository.findById(subscriptionId).orElseThrow().getSubscriptionType());
+    }
+
+    /**
+     * Automatic methods
+     */
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void CheckIsSubscriptionStillActive() {
+
+        LocalDate now = LocalDate.now();
+        List<Subscription> subscriptions = subscriptionRepository.findAll().stream()
+                .filter(subscription -> subscription.isActive())
+                .toList();
+
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getEndDate().isEqual(now)) {
+
+                subscription.setActive(false);
+
+                subscriptionRepository.save(subscription);
+
+                if(subscription.isRecursive()) {
+
+                    Integer childId = subscription.getChild().getChildId();
+                    Integer subscriptionTypeId = subscription.getSubscriptionType().getSubscriptionTypeId();
+
+                    saveSubscription(childId, subscriptionTypeId);
+                }
+            }
+        }
     }
 }
